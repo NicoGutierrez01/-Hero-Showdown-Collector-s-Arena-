@@ -9,10 +9,10 @@ export class Inicio extends Scene
 
     create ()
     {
-        const intro = this.add.video(0, 200, 'ankara')
-            .setScale(3.5);
+        const intro = this.add.video(0, 0, 'intro')
+            .setScale(1.7);
 
-        Phaser.Display.Align.In.Center(intro, this.add.zone(400, 250, 1024, 768));
+        Phaser.Display.Align.In.Center(intro, this.add.zone(512, 389, 1024, 768));
 
         this.cameras.main.fadeIn(2000);
 

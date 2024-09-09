@@ -38,6 +38,7 @@ export class Preloader extends Scene
         this.load.image('logo', 'logo.png');
         this.load.image('fondo', 'fondo.jpeg');
         this.load.image('negro','negro.png');
+        this.load.image('player','ToonPJ.png');
         this.load.image('jetpack', 'Jetpackk.png');
         this.load.image('pez', 'pez.png');
         this.load.image('hierro','hierro.png');
@@ -54,6 +55,7 @@ export class Preloader extends Scene
         this.load.setPath('video');
 
         this.load.video('ankara', 'ankara.mp4');
+        this.load.video('intro', 'intro.mp4');
 
         
 

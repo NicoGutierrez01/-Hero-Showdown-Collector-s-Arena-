@@ -7,7 +7,7 @@ export class Characters extends Scene {
     }
 
     init(data) {
-        this.selectedMode = data.selectedMode; // 'Vs' o 'Coop'
+        this.selectedMode = data.selectedMode; 
     }
 
     create() {
