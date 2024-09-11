@@ -35,10 +35,14 @@ export class Preloader extends Scene
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
 
+        this.load.spritesheet('player', 'ToonPJ.png', {
+            frameWidth: 207, // Ajustar según el tamaño de cada frame
+            frameHeight: 221 // Ajustar según el tamaño de cada frame
+        });
+
         this.load.image('logo', 'logo.png');
         this.load.image('fondo', 'fondo.jpeg');
         this.load.image('negro','negro.png');
-        this.load.image('player','ToonPJ.png');
         this.load.image('jetpack', 'Jetpackk.png');
         this.load.image('pez', 'pez.png');
         this.load.image('hierro','hierro.png');
@@ -48,18 +52,17 @@ export class Preloader extends Scene
         this.load.image('title', 'title.png');
         this.load.image('cover', 'cover.png');
         this.load.image('triangle', 'triangle.png');
-        this.load.image('Argentina', 'Argentina.webp')
-        this.load.image('Brasil', 'Brasil.png')
-        this.load.image('EEUU', 'EEUU.png')
+        this.load.image('Argentina', 'Argentina.webp');
+        this.load.image('Brasil', 'Brasil.png');
+        this.load.image('EEUU', 'EEUU.png');
+        this.load.image('devil', 'devil.png');
+        this.load.image('gun', 'gun.png');
+        this.load.image('bomb', 'bomb.png');
+        this.load.image('spade', 'spade.png');
 
         this.load.setPath('video');
 
-        this.load.video('ankara', 'ankara.mp4');
         this.load.video('intro', 'intro.mp4');
-
-        
-
-
     }
 
     create ()
