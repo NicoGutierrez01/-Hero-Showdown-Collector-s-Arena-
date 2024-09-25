@@ -1,6 +1,9 @@
 import { Scene } from 'phaser';
 import { InputManager } from '../Components/InputManager'; 
-import { inputConfigs } from '../utils/inputConfigs'; 
+import { inputConfigs } from '../utils/inputConfigs';
+import { Bomb } from '../Objects/Bomb';
+import { Gun } from '../Objects/Gun';
+import { Spade } from '../Objects/Spade';
 
 export class Vs extends Scene {
     constructor() {
@@ -13,7 +16,7 @@ export class Vs extends Scene {
 
         this.cameras.main.setBackgroundColor(0x00ff00);
         this.add.image(512, 384, 'background').setAlpha(0.5);
- 
+
         this.ground = this.physics.add.staticGroup();
         this.ground.add(this.physics.add.staticImage(512, 750, 'negro').setDisplaySize(1024, 50).setOrigin(0.5, 0.5).refreshBody()); 
         this.ground.add(this.physics.add.staticImage(512, 300, 'negro').setDisplaySize(350, 30).setOrigin(0.5, 0.5).refreshBody());  
@@ -29,7 +32,7 @@ export class Vs extends Scene {
         this.player2.setGravityY(300);
 
         this.physics.add.collider(this.player1, this.ground);
-        this.physics.add.collider(this.player2, this.ground);
+        this.physics.add.collider(this.player2, this.ground);        
 
         this.anims.create({
             key: 'walk',
@@ -48,7 +51,7 @@ export class Vs extends Scene {
             key: 'jump',
             frames: this.anims.generateFrameNumbers('player', { start: 14, end: 17 }),
             frameRate: 8, 
-            repeat:0  
+            repeat: 0  
         });
 
         this.inputManagerPlayer1 = new InputManager({
@@ -77,7 +80,7 @@ export class Vs extends Scene {
             }
         });
 
-        const buttonBack = this.add.text(80, 20, 'Back', {
+        const buttonBack = this.add.text(80, 40, 'Back', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -89,10 +92,7 @@ export class Vs extends Scene {
             this.scene.start('MainMenu');
         });
 
-        this.fallingObjects = this.physics.add.group({
-            defaultKey: 'fallingObject',
-            runChildUpdate: true
-        });
+        this.fallingObjects = this.physics.add.group();
 
         this.time.addEvent({
             delay: 5000, 
@@ -104,11 +104,7 @@ export class Vs extends Scene {
         this.physics.add.overlap(this.player1, this.fallingObjects, this.collectObject, null, this);
         this.physics.add.overlap(this.player2, this.fallingObjects, this.collectObject, null, this);
 
-        this.physics.add.collider(this.fallingObjects, this.ground);
-
-        this.ground.children.iterate(child => {
-            child.refreshBody();
-        });
+        this.physics.add.collider(this.spawnFallingObject, this.ground);
 
         this.physics.world.setBoundsCollision(true, true, true, true);
 
@@ -126,8 +122,8 @@ export class Vs extends Scene {
         this.time.delayedCall(this.gameDuration, () => {
             this.scene.start('GameOver');
         });
-    }
 
+    }
 
     updateTimer() {
         this.timeRemaining--;
@@ -141,7 +137,7 @@ export class Vs extends Scene {
     movePlayer(player, direction) {
         const speed = 400;
         const jumpVelocity = -600;
-    
+
         if (direction === 'left') {
             player.setVelocityX(-speed);
             player.anims.play('walk', true);
@@ -157,8 +153,6 @@ export class Vs extends Scene {
             player.setVelocityY(speed);
         }
     }
-    
-    
 
     stopPlayer(player) {
         player.setVelocityX(0);
@@ -166,34 +160,42 @@ export class Vs extends Scene {
     }
 
     spawnFallingObject() {
-        const objectType = Phaser.Math.Between(0, 2); 
         const xPosition = Phaser.Math.Between(50, 974); 
-        let fallingObject;
 
-        if (objectType === 0) {
-            fallingObject = this.physics.add.sprite(xPosition, 0, 'gun').setScale(0.1);
-            fallingObject.isHarmful = false;
-            fallingObject.setBounce(0);
-        } else if (objectType === 1) {
-            fallingObject = this.physics.add.sprite(xPosition, 0, 'spade').setScale(0.3);
-            fallingObject.isHarmful = false; 
-            fallingObject.setBounce(0); 
-        } else {
-            fallingObject = this.physics.add.sprite(xPosition, 0, 'bomb').setScale(0.3);
-            fallingObject.isHarmful = true; 
-            fallingObject.setBounce(5); 
+        // obtener un numero random del 1 al 3
+        let element = Phaser.Math.Between(1, 3);
+        let object
+        let callback
+
+        if (element == 1) {
+            object = new Bomb(this, xPosition, 0).setScale(0.3);
+            callback = () => {
+                //console.log('recolecte bomb')
+            }
+        }
+        if (element == 2) {
+            object = new Gun(this, xPosition, 0).setScale(0.1);
+            callback = () => {
+                //console.log('recolecte gun')
+            }
+        }
+        if (element == 3) {
+            object = new Spade(this, xPosition, 0).setScale(0.3); 
+            callback = () => {
+                //console.log('recolecte spade')
+            }
         }
 
-        fallingObject.setGravityY(200); 
-        fallingObject.setCollideWorldBounds(true);
-        fallingObject.body.onWorldBounds = true; 
-        this.fallingObjects.add(fallingObject); 
+        //collider entre player y object, y ejecuta callback
 
-        this.physics.add.collider(fallingObject, this.ground, () => {
-            console.log('Bomba colisionó con el suelo o plataforma');
-        });
+        // que el objecto colisiones con las plataformas
+        this.physics.add.collider(object, this.ground, callback, null, this)
+        
+
+       
+    
     }
-
+    
     collectObject(player, object) {
         if (object.isHarmful) {
             player.setTint(0xff0000);
@@ -201,5 +203,5 @@ export class Vs extends Scene {
         } else {
             object.destroy(); 
         }
-    }   
+    }
 }
