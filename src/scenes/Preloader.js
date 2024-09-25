@@ -35,7 +35,7 @@ export class Preloader extends Scene
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath('assets');
 
-        this.load.spritesheet('player', 'ToonPJ.png', {
+        this.load.spritesheet('player', 'animPJ.png', {
             frameWidth: 207, // Ajustar según el tamaño de cada frame
             frameHeight: 221 // Ajustar según el tamaño de cada frame
         });

@@ -5,18 +5,20 @@ import { inputConfigs } from '../utils/inputConfigs';
 export class Vs extends Scene {
     constructor() {
         super('Vs');
+        this.gameDuration = 60000; 
     }
 
     create() {
+        this.timeRemaining = this.gameDuration / 1000; 
+
         this.cameras.main.setBackgroundColor(0x00ff00);
         this.add.image(512, 384, 'background').setAlpha(0.5);
-        this.add.image(512, 100, 'devil').setScale(0.2);
-
+ 
         this.ground = this.physics.add.staticGroup();
-        this.ground.add(this.physics.add.staticImage(512, 750, 'negro').setDisplaySize(1024, 50).setOrigin(0.5, 0.5).refreshBody()); // Suelo
-        this.ground.add(this.physics.add.staticImage(512, 300, 'negro').setDisplaySize(350, 30).setOrigin(0.5, 0.5).refreshBody());  // Plataforma
-        this.ground.add(this.physics.add.staticImage(0, 500, 'negro').setDisplaySize(250, 30).setOrigin(0.5, 0.5).refreshBody());    // Plataforma izquierda
-        this.ground.add(this.physics.add.staticImage(1024, 500, 'negro').setDisplaySize(250, 30).setOrigin(0.5, 0.5).refreshBody()); // Plataforma derecha
+        this.ground.add(this.physics.add.staticImage(512, 750, 'negro').setDisplaySize(1024, 50).setOrigin(0.5, 0.5).refreshBody()); 
+        this.ground.add(this.physics.add.staticImage(512, 300, 'negro').setDisplaySize(350, 30).setOrigin(0.5, 0.5).refreshBody());  
+        this.ground.add(this.physics.add.staticImage(0, 500, 'negro').setDisplaySize(250, 30).setOrigin(0.5, 0.5).refreshBody());    
+        this.ground.add(this.physics.add.staticImage(1024, 500, 'negro').setDisplaySize(250, 30).setOrigin(0.5, 0.5).refreshBody()); 
 
         this.player1 = this.physics.add.sprite(100, 660, 'player').setScale(0.5);
         this.player1.setCollideWorldBounds(true);
@@ -41,6 +43,12 @@ export class Vs extends Scene {
             frames: this.anims.generateFrameNumbers('player', { start: 8, end: 13 }),
             frameRate: 12,
             repeat: -1
+        });
+        this.anims.create({
+            key: 'jump',
+            frames: this.anims.generateFrameNumbers('player', { start: 14, end: 17 }),
+            frameRate: 8, 
+            repeat:0  
         });
 
         this.inputManagerPlayer1 = new InputManager({
@@ -103,12 +111,37 @@ export class Vs extends Scene {
         });
 
         this.physics.world.setBoundsCollision(true, true, true, true);
+
+        this.timerText = this.add.text(924, 50, `Time: ${this.timeRemaining}`, {
+            fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
+        }).setOrigin(0.5);
+
+        this.time.addEvent({
+            delay: 1000, 
+            callback: this.updateTimer,
+            callbackScope: this,
+            loop: true
+        });
+
+        this.time.delayedCall(this.gameDuration, () => {
+            this.scene.start('GameOver');
+        });
+    }
+
+
+    updateTimer() {
+        this.timeRemaining--;
+        this.timerText.setText(`Time: ${this.timeRemaining}`);
+
+        if (this.timeRemaining <= 0) {
+            this.timerText.setText('Time: 0');
+        }
     }
 
     movePlayer(player, direction) {
         const speed = 400;
         const jumpVelocity = -600;
-
+    
         if (direction === 'left') {
             player.setVelocityX(-speed);
             player.anims.play('walk', true);
@@ -119,10 +152,13 @@ export class Vs extends Scene {
             player.flipX = false;
         } else if (direction === 'up' && player.body.onFloor()) {
             player.setVelocityY(jumpVelocity);
+            player.anims.play('jump');
         } else if (direction === 'down') {
             player.setVelocityY(speed);
         }
     }
+    
+    
 
     stopPlayer(player) {
         player.setVelocityX(0);
@@ -145,7 +181,7 @@ export class Vs extends Scene {
         } else {
             fallingObject = this.physics.add.sprite(xPosition, 0, 'bomb').setScale(0.3);
             fallingObject.isHarmful = true; 
-            fallingObject.setBounce(1.2); 
+            fallingObject.setBounce(5); 
         }
 
         fallingObject.setGravityY(200); 
@@ -165,5 +201,5 @@ export class Vs extends Scene {
         } else {
             object.destroy(); 
         }
-    }
+    }   
 }
