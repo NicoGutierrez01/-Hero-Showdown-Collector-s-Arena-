@@ -22,27 +22,27 @@ export class Characters extends Scene {
 
         let previouseCard = null;
         const planes = [
-            new Card(this, 256, this.scale.height - 576, "cover", {
+            new Card(this, 480, this.scale.height - 810, "cover", {
                 titleTexture: "title",
                 characterTexture: "hierro"
             }),
-            new Card(this, 256, this.scale.height - 384, "cover", {
+            new Card(this, 480, this.scale.height - 540, "cover", {
                 titleTexture: "title",
                 characterTexture: "panda"
             }),
-            new Card(this, 256, this.scale.height - 192, "cover", {
+            new Card(this, 480, this.scale.height - 270, "cover", {
                 titleTexture: "title",
                 characterTexture: "jetpack"
             }),
-            new Card(this, 768, this.scale.height - 576, "cover", {
+            new Card(this, 1440, this.scale.height - 810, "cover", {
                 titleTexture: "title",
                 characterTexture: "pez"
             }),
-            new Card(this, 768, this.scale.height - 384, "cover", {
+            new Card(this, 1440, this.scale.height - 540, "cover", {
                 titleTexture: "title",
                 characterTexture: "shelly"
             }),
-            new Card(this, 768, this.scale.height - 192, "cover", {
+            new Card(this, 1440, this.scale.height - 270, "cover", {
                 titleTexture: "title",
                 characterTexture: "zombie"
             })
@@ -73,7 +73,7 @@ export class Characters extends Scene {
     }
 
     createUI() {
-        const buttonBack = this.add.text(80, 720, 'Back', {
+        const buttonBack = this.add.text(80, 1040, 'Atras', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'

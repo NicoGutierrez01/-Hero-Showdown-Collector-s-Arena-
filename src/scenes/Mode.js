@@ -6,25 +6,25 @@ export class Mode extends Scene {
     }
 
     create() {
-        const buttonVs = this.add.text(512, 192, 'Vs', {
+        const buttonVs = this.add.text(960, 270, 'Vs', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const buttonCoop = this.add.text(512, 576, 'Coop', {
+        const buttonCoop = this.add.text(960, 810, 'Coop', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const buttonBack = this.add.text(80, 720, 'Back', {
+        const buttonBack = this.add.text(80, 1040, 'Atras', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        this.add.line(512, 384, 0, 0, 1024, 0, 0x000000).setOrigin(0.5);
+        this.add.line(960, 540, 0, 0, 1920, 0, 0x000000).setOrigin(0.5);
 
         buttonCoop.setInteractive({ cursor: 'pointer' });
         buttonVs.setInteractive({ cursor: 'pointer' });

@@ -1,5 +1,4 @@
 import { Boot } from './scenes/Boot';
-import { Game } from './scenes/Game';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
 import { Preloader } from './scenes/Preloader';
@@ -15,8 +14,8 @@ import { Credits } from './scenes/Credits';
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config = {
     type: Phaser.AUTO,
-    width: 1024,
-    height: 768,
+    width: 1920,
+    height: 1080,
     parent: 'game-container',
     backgroundColor: '#028af8',
     scale: {
@@ -25,8 +24,8 @@ const config = {
     },
     physics: {
         default: "arcade",
-        arcade: { 
-          gravity: { y: 200 },
+        arcade: {
+          gravity: { y: 0 },
           debug: false,
         },
     },
@@ -34,7 +33,6 @@ const config = {
         Boot,
         Preloader,
         MainMenu,
-        Game,
         GameOver,
         Characters,
         Inicio,

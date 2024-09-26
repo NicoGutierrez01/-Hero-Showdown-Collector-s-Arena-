@@ -15,19 +15,23 @@ export class Vs extends Scene {
         this.timeRemaining = this.gameDuration / 1000; 
 
         this.cameras.main.setBackgroundColor(0x00ff00);
-        this.add.image(512, 384, 'background').setAlpha(0.5);
+        this.add.image(960, 540, 'background').setAlpha(0.5).setScale(2.7);
 
+
+        this.physics.add.staticImage(960, 1080, 'negro').setDisplaySize(1920, 50).setOrigin(0.5, 0.5).refreshBody(); 
         this.ground = this.physics.add.staticGroup();
-        this.ground.add(this.physics.add.staticImage(512, 750, 'negro').setDisplaySize(1024, 50).setOrigin(0.5, 0.5).refreshBody()); 
-        this.ground.add(this.physics.add.staticImage(512, 300, 'negro').setDisplaySize(350, 30).setOrigin(0.5, 0.5).refreshBody());  
-        this.ground.add(this.physics.add.staticImage(0, 500, 'negro').setDisplaySize(250, 30).setOrigin(0.5, 0.5).refreshBody());    
-        this.ground.add(this.physics.add.staticImage(1024, 500, 'negro').setDisplaySize(250, 30).setOrigin(0.5, 0.5).refreshBody()); 
+        
+        this.ground.add(this.physics.add.staticImage(960, 540, 'negro').setDisplaySize(350, 30).setOrigin(0.5, 0.5).refreshBody());  
+        this.ground.add(this.physics.add.staticImage(200, 810, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody());    
+        this.ground.add(this.physics.add.staticImage(1720, 810, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody()); 
+        this.ground.add(this.physics.add.staticImage(200, 270, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody()); 
+        this.ground.add(this.physics.add.staticImage(1720, 270, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody()); 
 
-        this.player1 = this.physics.add.sprite(100, 660, 'player').setScale(0.5);
+        this.player1 = this.physics.add.sprite(480, 1000, 'player').setScale(0.5);
         this.player1.setCollideWorldBounds(true);
         this.player1.setGravityY(300);
 
-        this.player2 = this.physics.add.sprite(300, 660, 'player').setScale(0.5);
+        this.player2 = this.physics.add.sprite(1440, 1000, 'player').setScale(0.5);
         this.player2.setCollideWorldBounds(true);
         this.player2.setGravityY(300);
 
@@ -108,7 +112,7 @@ export class Vs extends Scene {
 
         this.physics.world.setBoundsCollision(true, true, true, true);
 
-        this.timerText = this.add.text(924, 50, `Time: ${this.timeRemaining}`, {
+        this.timerText = this.add.text(1800, 50, `Time: ${this.timeRemaining}`, {
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 

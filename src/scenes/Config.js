@@ -11,54 +11,54 @@ export class Config extends Scene
     {
         let volume = 50;
 
-        this.add.text(512, 192, 'Idioma', {
+        this.add.text(960, 270, 'Idioma', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
         const flags = [
-            this.add.image(512, 260, 'Argentina').setScale(0.5),
-            this.add.image(512, 260, 'EEUU').setScale(0.1).setVisible(false),
-            this.add.image(512, 260, 'Brasil').setScale(0.3).setVisible(false)
+            this.add.image(960, 370, 'Argentina').setScale(0.5),
+            this.add.image(960, 370, 'EEUU').setScale(0.1).setVisible(false),
+            this.add.image(960, 370, 'Brasil').setScale(0.3).setVisible(false)
         ];
         let currentFlagIndex = 0;
 
-        this.add.text(512, 384, 'Sonido', {
+        this.add.text(960, 540, 'Sonido', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const volumeBarBg = this.add.rectangle(512, 450, 150, 20, 0x888888); // Fondo de la barra
-        const volumeBar = this.add.rectangle(437, 450, 75, 20, 0xffffff).setOrigin(0, 0.5); // Barra actual
+        const volumeBarBg = this.add.rectangle(960, 640, 150, 20, 0x888888); 
+        const volumeBar = this.add.rectangle(885, 640, 75, 20, 0xffffff).setOrigin(0, 0.5); 
 
-        this.add.text(512, 576, 'Pantalla', {
+        this.add.text(960, 810, 'Pantalla', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const Fullscreen = this.add.text(512, 650, 'Completa', {
+        const Fullscreen = this.add.text(960, 910, 'Completa', {
             fontFamily: 'Arial Black', fontSize: 32, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const buttonBack = this.add.text(80, 720, 'Back', {
+        const buttonBack = this.add.text(80, 1040, 'Atras', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const buttonRight = this.add.image(630, 260, 'triangle').setScale(0.1);
-        const buttonLeft = this.add.image(394, 260, 'triangle').setScale(0.1).setAngle(180);
+        const buttonRight = this.add.image(1160, 370, 'triangle').setScale(0.1);
+        const buttonLeft = this.add.image(760, 370, 'triangle').setScale(0.1).setAngle(180);
 
-        const buttonRight2 = this.add.image(630, 450, 'triangle').setScale(0.1);
-        const buttonLeft2 = this.add.image(394, 450, 'triangle').setScale(0.1).setAngle(180);
+        const buttonRight2 = this.add.image(1160, 640, 'triangle').setScale(0.1);
+        const buttonLeft2 = this.add.image(760, 640, 'triangle').setScale(0.1).setAngle(180);
 
-        const buttonRight3 = this.add.image(630, 650, 'triangle').setScale(0.1);
-        const buttonLeft3 = this.add.image(394, 650, 'triangle').setScale(0.1).setAngle(180);
+        const buttonRight3 = this.add.image(1160, 910, 'triangle').setScale(0.1);
+        const buttonLeft3 = this.add.image(760, 910, 'triangle').setScale(0.1).setAngle(180);
 
         buttonRight.setInteractive({ cursor: 'pointer' });
         buttonLeft.setInteractive({ cursor: 'pointer' });
