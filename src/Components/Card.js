@@ -13,6 +13,8 @@ export class Card extends Phaser.GameObjects.Plane
         // Title
         this.title = scene.add.image(x, y + 100, options.titleTexture);
 
+        this.characterTexture = options.characterTexture;
+
     }
 
     moveCard ()

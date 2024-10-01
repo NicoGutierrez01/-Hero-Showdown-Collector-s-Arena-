@@ -22,30 +22,30 @@ export class Characters extends Scene {
 
         let previouseCard = null;
         const planes = [
-            new Card(this, 480, this.scale.height - 810, "cover", {
-                titleTexture: "title",
+            new Card(this, 480, this.scale.height - 810, "lolo", {
+                titleTexture: "hierrotitle",
                 characterTexture: "hierro"
-            }),
-            new Card(this, 480, this.scale.height - 540, "cover", {
-                titleTexture: "title",
+            }).setScale(1),
+            new Card(this, 960, this.scale.height - 270, "san", {
+                titleTexture: "pandatitle",
                 characterTexture: "panda"
-            }),
-            new Card(this, 480, this.scale.height - 270, "cover", {
-                titleTexture: "title",
+            }).setScale(1),
+            new Card(this, 480, this.scale.height - 270, "nico", {
+                titleTexture: "jetpacktitle",
                 characterTexture: "jetpack"
-            }),
-            new Card(this, 1440, this.scale.height - 810, "cover", {
-                titleTexture: "title",
+            }).setScale(1),
+            new Card(this, 1440, this.scale.height - 810, "blito", {
+                titleTexture: "peztitle",
                 characterTexture: "pez"
-            }),
-            new Card(this, 1440, this.scale.height - 540, "cover", {
-                titleTexture: "title",
+            }).setScale(1),
+            new Card(this, 960, this.scale.height - 810, "dib", {
+                titleTexture: "shellytitle",
                 characterTexture: "shelly"
-            }),
-            new Card(this, 1440, this.scale.height - 270, "cover", {
-                titleTexture: "title",
+            }).setScale(1),
+            new Card(this, 1440, this.scale.height - 270, "pato", {
+                titleTexture: "zombietitle",
                 characterTexture: "zombie"
-            })
+            }).setScale(1)
         ];
 
         this.input.on(Phaser.Input.Events.POINTER_DOWN, (pointer) => {
@@ -101,7 +101,8 @@ export class Characters extends Scene {
 
         this.startMessage.on('pointerdown', () => {
             console.log(`Going to scene: ${this.selectedMode}`);
-            this.scene.start(this.selectedMode);
+            console.table(this.selectedCharacter1.characterTexture)
+            this.scene.start(this.selectedMode,{player1:this.selectedCharacter1.characterTexture,player2:this.selectedCharacter2.characterTexture});
         });
     }
 

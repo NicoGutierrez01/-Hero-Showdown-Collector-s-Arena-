@@ -8,7 +8,12 @@ import { Spade } from '../Objects/Spade';
 export class Vs extends Scene {
     constructor() {
         super('Vs');
-        this.gameDuration = 60000; 
+        this.gameDuration = 150000; 
+    }
+    
+    init(data){
+        this.player1texture = data.player1;
+        this.player2texture = data.player2;
     }
 
     create() {
@@ -16,7 +21,6 @@ export class Vs extends Scene {
 
         this.cameras.main.setBackgroundColor(0x00ff00);
         this.add.image(960, 540, 'background').setAlpha(0.5).setScale(2.7);
-
 
         this.physics.add.staticImage(960, 1080, 'negro').setDisplaySize(1920, 50).setOrigin(0.5, 0.5).refreshBody(); 
         this.ground = this.physics.add.staticGroup();
@@ -27,11 +31,11 @@ export class Vs extends Scene {
         this.ground.add(this.physics.add.staticImage(200, 270, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody()); 
         this.ground.add(this.physics.add.staticImage(1720, 270, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody()); 
 
-        this.player1 = this.physics.add.sprite(480, 1000, 'player').setScale(0.5);
+        this.player1 = this.physics.add.sprite(480, 1000, this.player1texture).setScale(0.7);
         this.player1.setCollideWorldBounds(true);
         this.player1.setGravityY(300);
 
-        this.player2 = this.physics.add.sprite(1440, 1000, 'player').setScale(0.5);
+        this.player2 = this.physics.add.sprite(1440, 1000, this.player2texture).setScale(0.7);
         this.player2.setCollideWorldBounds(true);
         this.player2.setGravityY(300);
 
@@ -57,6 +61,14 @@ export class Vs extends Scene {
             frameRate: 8, 
             repeat: 0  
         });
+
+        this.anims.create({
+            key: 'explode',
+            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 10 }),
+            frameRate: 10,
+            hideOnComplete: true
+        });
+        
 
         this.inputManagerPlayer1 = new InputManager({
             scene: this,
@@ -84,7 +96,7 @@ export class Vs extends Scene {
             }
         });
 
-        const buttonBack = this.add.text(80, 40, 'Back', {
+        const buttonBack = this.add.text(80, 40, 'Atras', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -112,7 +124,15 @@ export class Vs extends Scene {
 
         this.physics.world.setBoundsCollision(true, true, true, true);
 
-        this.timerText = this.add.text(1800, 50, `Time: ${this.timeRemaining}`, {
+        this.timerText = this.add.text(960, 50, `Time: ${this.timeRemaining}`, {
+            fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
+        }).setOrigin(0.5);
+
+        this.points = this.add.text(620, 50, 'Payer 1 :',{
+            fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
+        }).setOrigin(0.5);
+
+        this.points2 = this.add.text(1300, 50, 'Payer 2 :',{
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
@@ -139,8 +159,8 @@ export class Vs extends Scene {
     }
 
     movePlayer(player, direction) {
-        const speed = 400;
-        const jumpVelocity = -600;
+        const speed = 300;
+        const jumpVelocity = -500;
 
         if (direction === 'left') {
             player.setVelocityX(-speed);
@@ -166,38 +186,30 @@ export class Vs extends Scene {
     spawnFallingObject() {
         const xPosition = Phaser.Math.Between(50, 974); 
 
-        // obtener un numero random del 1 al 3
         let element = Phaser.Math.Between(1, 3);
-        let object
-        let callback
+        let object;
+        let callback;
 
-        if (element == 1) {
+        if (element === 1) {
             object = new Bomb(this, xPosition, 0).setScale(0.3);
             callback = () => {
-                //console.log('recolecte bomb')
-            }
+                // Acciones después de que la bomba colisione
+            };
         }
-        if (element == 2) {
-            object = new Gun(this, xPosition, 0).setScale(0.1);
+        if (element === 2) {
+            object = new Gun(this, xPosition, 0).setScale(0.15);
             callback = () => {
-                //console.log('recolecte gun')
-            }
+                // Acciones después de que la pistola colisione
+            };
         }
-        if (element == 3) {
-            object = new Spade(this, xPosition, 0).setScale(0.3); 
+        if (element === 3) {
+            object = new Spade(this, xPosition, 0).setScale(0.1); 
             callback = () => {
-                //console.log('recolecte spade')
-            }
+                // Acciones después de que la pala colisione
+            };
         }
 
-        //collider entre player y object, y ejecuta callback
-
-        // que el objecto colisiones con las plataformas
-        this.physics.add.collider(object, this.ground, callback, null, this)
-        
-
-       
-    
+        this.physics.add.collider(object, this.ground, callback, null, this);
     }
     
     collectObject(player, object) {
