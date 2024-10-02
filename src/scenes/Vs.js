@@ -9,6 +9,8 @@ export class Vs extends Scene {
     constructor() {
         super('Vs');
         this.gameDuration = 150000; 
+        this.player1Score = 0;
+        this.player2Score = 0;
     }
     
     init(data){
@@ -61,12 +63,11 @@ export class Vs extends Scene {
             frameRate: 8, 
             repeat: 0  
         });
-
         this.anims.create({
-            key: 'explode',
-            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 10 }),
-            frameRate: 10,
-            hideOnComplete: true
+            key: 'action',
+            frames: this.anims.generateFrameNumbers('player', { start: 18, end: 30 }),
+            frameRate: 8, 
+            repeat: 0  
         });
         
 
@@ -78,7 +79,7 @@ export class Vs extends Scene {
                 down: () => this.movePlayer(this.player1, 'down'),
                 left: () => this.movePlayer(this.player1, 'left'),
                 right: () => this.movePlayer(this.player1, 'right'),
-                action: () => this.movePlayer(this.player1, 'action'),
+                action: () => this.attackPlayer(this.player1, this.player2),
                 stop: () => this.stopPlayer(this.player1)
             }
         });
@@ -91,7 +92,7 @@ export class Vs extends Scene {
                 down: () => this.movePlayer(this.player2, 'down'),
                 left: () => this.movePlayer(this.player2, 'left'),
                 right: () => this.movePlayer(this.player2, 'right'),
-                action: () => this.movePlayer(this.player2, 'action'),
+                action: () => this.attackPlayer(this.player2, this.player1),
                 stop: () => this.stopPlayer(this.player2)
             }
         });
@@ -128,11 +129,11 @@ export class Vs extends Scene {
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
-        this.points = this.add.text(620, 50, 'Payer 1 :',{
+        this.player1ScoreText = this.add.text(620, 50, 'Payer 1 :',{
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
-        this.points2 = this.add.text(1300, 50, 'Payer 2 :',{
+        this.player2ScoreText = this.add.text(1300, 50, 'Payer 2 :',{
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
@@ -146,6 +147,8 @@ export class Vs extends Scene {
         this.time.delayedCall(this.gameDuration, () => {
             this.scene.start('GameOver');
         });
+
+        this.physics.world.setBoundsCollision(true, true, true, true);
 
     }
 
@@ -175,13 +178,39 @@ export class Vs extends Scene {
             player.anims.play('jump');
         } else if (direction === 'down') {
             player.setVelocityY(speed);
+        } else if (direction === 'action') {
+            player.setVelocityX(0);
+            player.anims.play('action', true);
         }
     }
+
+
 
     stopPlayer(player) {
         player.setVelocityX(0);
         player.anims.play('idle', true);
     }
+
+    attackPlayer(attacker, defender) {
+        const distance = Phaser.Math.Distance.Between(attacker.x, attacker.y, defender.x, defender.y);
+
+        if (distance < 100) {  
+            attacker.anims.play('action', true); 
+
+            const damage = Phaser.Math.Between(5, 15); 
+            if (attacker === this.player1) {
+                this.player1Score += damage;
+                this.player1ScoreText.setText(`Player 1: ${this.player1Score}`);
+            } else {
+                this.player2Score += damage;
+                this.player2ScoreText.setText(`Player 2: ${this.player2Score}`);
+            }
+
+            defender.setTint(0xff0000); 
+            this.time.delayedCall(500, () => defender.clearTint()); 
+        }
+    }
+
 
     spawnFallingObject() {
         const xPosition = Phaser.Math.Between(50, 974); 

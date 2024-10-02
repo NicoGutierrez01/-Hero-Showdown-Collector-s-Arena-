@@ -11,7 +11,7 @@ const wasd = {
     down: ['S'],
     left: ['A'],
     right: ['D'],
-    action: ['SPACE']
+    action: ['F']
 };
 
 export const inputConfigs = {
