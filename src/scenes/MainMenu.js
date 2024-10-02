@@ -9,7 +9,7 @@ export class MainMenu extends Scene
 
     create ()
     {
-        this.add.image(960, 600, 'fondo').setScale(1);
+        this.add.image(960, 540, 'fondomenu');
 
         this.add.text(960, 300, 'Hero Showdown', {
             fontFamily: 'Arial Black', fontSize: 100, color: '#ffffff',

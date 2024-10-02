@@ -21,8 +21,8 @@ export class Vs extends Scene {
     create() {
         this.timeRemaining = this.gameDuration / 1000; 
 
-        this.cameras.main.setBackgroundColor(0x00ff00);
-        this.add.image(960, 540, 'background').setAlpha(0.5).setScale(2.7);
+
+        this.add.image(960, 540, 'fondonivel');
 
         this.physics.add.staticImage(960, 1080, 'negro').setDisplaySize(1920, 50).setOrigin(0.5, 0.5).refreshBody(); 
         this.ground = this.physics.add.staticGroup();

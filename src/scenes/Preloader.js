@@ -25,6 +25,8 @@ export class Preloader extends Scene
             frameHeight: 225 
         });
 
+        this.load.image('fondonivel', 'fondonivel.png');
+        this.load.image('fondomenu', 'fondomenu.png'); 
         this.load.image('logo', 'logo.png');
         this.load.image('fondo', 'fondo.jpeg');
         this.load.image('negro','negro.png');
