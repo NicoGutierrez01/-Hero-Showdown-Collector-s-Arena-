@@ -11,6 +11,8 @@ export class Vs extends Scene {
         this.gameDuration = 150000; 
         this.player1Score = 0;
         this.player2Score = 0;
+
+
     }
     
     init(data){
@@ -20,6 +22,9 @@ export class Vs extends Scene {
 
     create() {
         this.timeRemaining = this.gameDuration / 1000; 
+
+        this.player1CanAttack = true;  // Jugador 1 puede atacar
+        this.player2CanAttack = true;  // Jugador 2 puede atacar
 
 
         this.add.image(960, 540, 'fondonivel');
@@ -69,6 +74,15 @@ export class Vs extends Scene {
             frameRate: 8, 
             repeat: 0  
         });
+
+        const config = {
+            key: 'explode',
+            frames: this.anims.generateFrameNumbers('bomb', { start: 0, end: 11 }),
+            frameRate: 10,
+            repeat: 0
+        };
+
+        this.anims.create(config);
         
 
         this.inputManagerPlayer1 = new InputManager({
@@ -79,7 +93,7 @@ export class Vs extends Scene {
                 down: () => this.movePlayer(this.player1, 'down'),
                 left: () => this.movePlayer(this.player1, 'left'),
                 right: () => this.movePlayer(this.player1, 'right'),
-                action: () => this.attackPlayer(this.player1, this.player2),
+                action: () => this.attackPlayer(this.player1, this.player2, this.player1CanAttack),
                 stop: () => this.stopPlayer(this.player1)
             }
         });
@@ -92,7 +106,7 @@ export class Vs extends Scene {
                 down: () => this.movePlayer(this.player2, 'down'),
                 left: () => this.movePlayer(this.player2, 'left'),
                 right: () => this.movePlayer(this.player2, 'right'),
-                action: () => this.attackPlayer(this.player2, this.player1),
+                action: () => this.attackPlayer(this.player2, this.player1, this.player2CanAttack),
                 stop: () => this.stopPlayer(this.player2)
             }
         });
@@ -191,25 +205,29 @@ export class Vs extends Scene {
         player.anims.play('idle', true);
     }
 
-    attackPlayer(attacker, defender) {
+    attackPlayer(attacker, defender, attackerCanAttackFlag) {
         const distance = Phaser.Math.Distance.Between(attacker.x, attacker.y, defender.x, defender.y);
-
-        if (distance < 100) {  
+    
+        // Solo permite el ataque si la bandera de ataque está habilitada
+        if (distance < 100 && attackerCanAttackFlag) {  
             attacker.anims.play('action', true); 
-
+    
             const damage = Phaser.Math.Between(5, 15); 
-            if (attacker === this.player1) {
+            if (attacker === this.player1 && this.player1CanAttack) {
                 this.player1Score += damage;
                 this.player1ScoreText.setText(`Player 1: ${this.player1Score}`);
-            } else {
+                this.player1CanAttack = false;  // Desactiva el ataque para jugador 1
+            } else if (attacker === this.player2 && this.player2CanAttack) {
                 this.player2Score += damage;
                 this.player2ScoreText.setText(`Player 2: ${this.player2Score}`);
+                this.player2CanAttack = false;  // Desactiva el ataque para jugador 2
             }
-
+    
             defender.setTint(0xff0000); 
             this.time.delayedCall(500, () => defender.clearTint()); 
         }
     }
+    
 
 
     spawnFallingObject() {
@@ -221,10 +239,45 @@ export class Vs extends Scene {
 
         if (element === 1) {
             object = new Bomb(this, xPosition, 0).setScale(0.3);
-            callback = () => {
-                // Acciones después de que la bomba colisione
-            };
+        
+            // Inicializa la bandera de colisión
+            object.hasCollided = false;
+            
+            // Detectar colisión entre la bomba y el jugador 1
+            this.physics.add.overlap(object, this.player1, () => {
+                if (!object.hasCollided) {  // Verifica si ya ha colisionado
+                    object.hasCollided = true;  // Marca como colisionada
+        
+                    // Iniciar animación de explosión y actualizar puntaje
+                    object.play('explode');
+                    this.player1Score -= 10;  // Jugador 1 pierde puntos
+                    this.player1ScoreText.setText(`Player 1: ${this.player1Score}`);
+        
+                    // Esperar a que termine la animación antes de destruir la bomba
+                    object.on('animationcomplete', () => {
+                        object.destroy();
+                    });
+                }
+            });
+        
+            // Detectar colisión entre la bomba y el jugador 2
+            this.physics.add.overlap(object, this.player2, () => {
+                if (!object.hasCollided) {  // Verifica si ya ha colisionado
+                    object.hasCollided = true;  // Marca como colisionada
+        
+                    // Iniciar animación de explosión y actualizar puntaje
+                    object.play('explode');
+                    this.player2Score -= 10;  // Jugador 2 pierde puntos
+                    this.player2ScoreText.setText(`Player 2: ${this.player2Score}`);
+        
+                    // Esperar a que termine la animación antes de destruir la bomba
+                    object.on('animationcomplete', () => {
+                        object.destroy();
+                    });
+                }
+            });
         }
+                
         if (element === 2) {
             object = new Gun(this, xPosition, 0).setScale(0.15);
             callback = () => {

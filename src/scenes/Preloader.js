@@ -20,8 +20,8 @@ export class Preloader extends Scene
             frameHeight: 221 
         });
 
-        this.load.spritesheet('explosion', 'explosion.png', {
-            frameWidth: 214, 
+        this.load.spritesheet('bomb', 'bomb.png', {
+            frameWidth: 208, 
             frameHeight: 225 
         });
 

@@ -46,14 +46,24 @@ export class InputManager {
         this.scene.input.keyboard.on('keydown', (event) => {
             this.processInput(event.key.toUpperCase());
         });
-
+    
         this.scene.input.keyboard.on('keyup', (event) => {
-            if (this.allKeys.includes(event.key.toUpperCase()) && this.callbacks.stop) {
-                this.callbacks.stop();
+            if (this.allKeys.includes(event.key.toUpperCase())) {
+                if (this.callbacks.stop) {
+                    this.callbacks.stop();
+                }
+    
+                // Restablecer la capacidad de ataque al soltar la tecla de acción
+                if (event.key.toUpperCase() === 'K') {
+                    this.scene.player2CanAttack = true;  // Permitir ataque nuevamente para jugador 2
+                }
+                if (event.key.toUpperCase() === 'F') {
+                    this.scene.player1CanAttack = true;  // Permitir ataque nuevamente para jugador 1
+                }
             }
         });
     }
-
+    
     initMouseListeners() {
         this.scene.input.on('pointerdown', (pointer) => {
             if (this.inputConfig.action.includes('CLICK')) {
