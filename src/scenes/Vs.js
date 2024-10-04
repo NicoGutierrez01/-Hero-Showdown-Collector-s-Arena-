@@ -11,8 +11,7 @@ export class Vs extends Scene {
         this.gameDuration = 150000; 
         this.player1Score = 0;
         this.player2Score = 0;
-
-
+        this.gameOver = false;
     }
     
     init(data){
@@ -23,8 +22,8 @@ export class Vs extends Scene {
     create() {
         this.timeRemaining = this.gameDuration / 1000; 
 
-        this.player1CanAttack = true;  // Jugador 1 puede atacar
-        this.player2CanAttack = true;  // Jugador 2 puede atacar
+        this.player1CanAttack = true;  
+        this.player2CanAttack = true;  
 
 
         this.add.image(960, 540, 'fondonivel');
@@ -71,7 +70,7 @@ export class Vs extends Scene {
         this.anims.create({
             key: 'action',
             frames: this.anims.generateFrameNumbers('player', { start: 18, end: 30 }),
-            frameRate: 8, 
+            frameRate: 30, 
             repeat: 0  
         });
 
@@ -126,7 +125,7 @@ export class Vs extends Scene {
         this.fallingObjects = this.physics.add.group();
 
         this.time.addEvent({
-            delay: 5000, 
+            delay: 15000, 
             callback: this.spawnFallingObject,
             callbackScope: this,
             loop: true
@@ -143,11 +142,11 @@ export class Vs extends Scene {
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
-        this.player1ScoreText = this.add.text(620, 50, 'Payer 1 :',{
+        this.player1ScoreText = this.add.text(620, 50, 'Jugador 1 :',{
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
-        this.player2ScoreText = this.add.text(1300, 50, 'Payer 2 :',{
+        this.player2ScoreText = this.add.text(1300, 50, 'Jugador 2 :',{
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
@@ -159,7 +158,10 @@ export class Vs extends Scene {
         });
 
         this.time.delayedCall(this.gameDuration, () => {
-            this.scene.start('GameOver');
+            this.scene.start('GameOver', {
+                player1Score: this.player1Score,
+                player2Score: this.player2Score
+            });
         });
 
         this.physics.world.setBoundsCollision(true, true, true, true);
@@ -176,7 +178,7 @@ export class Vs extends Scene {
     }
 
     movePlayer(player, direction) {
-        const speed = 300;
+        const speed = 400;
         const jumpVelocity = -500;
 
         if (direction === 'left') {
@@ -238,7 +240,7 @@ export class Vs extends Scene {
         let callback;
 
         if (element === 1) {
-            object = new Bomb(this, xPosition, 0).setScale(0.3);
+            object = new Bomb(this, xPosition, 0).setScale(0.4);
         
             // Inicializa la bandera de colisión
             object.hasCollided = false;
@@ -279,13 +281,30 @@ export class Vs extends Scene {
         }
                 
         if (element === 2) {
-            object = new Gun(this, xPosition, 0).setScale(0.15);
-            callback = () => {
-                // Acciones después de que la pistola colisione
-            };
+            object = new Gun(this, xPosition, 0).setScale(0.15);       
+            this.physics.add.overlap(object, this.player1, () => {
+                // Acción cuando el jugador colisiona con el arma y la recoge
+                object.destroy(); // Elimina el objeto del mundo 
+            });
+        
+            this.physics.add.overlap(object, this.player2, () => {
+                // Acción cuando el jugador colisiona con el arma y la recoge
+                object.destroy(); // Elimina el objeto del mundo 
+            });
         }
+        
         if (element === 3) {
             object = new Spade(this, xPosition, 0).setScale(0.1); 
+            this.physics.add.overlap(object, this.player1, () => {
+                // Acción cuando el jugador colisiona con la pala y la recoge
+                object.destroy(); // Elimina el objeto del mundo 
+            });
+        
+            this.physics.add.overlap(object, this.player2, () => {
+                // Acción cuando el jugador colisiona con la pala y la recoge
+                object.destroy(); // Elimina el objeto del mundo 
+            });
+
             callback = () => {
                 // Acciones después de que la pala colisione
             };

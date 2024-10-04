@@ -21,8 +21,8 @@ export class Preloader extends Scene
         });
 
         this.load.spritesheet('bomb', 'bomb.png', {
-            frameWidth: 208, 
-            frameHeight: 225 
+            frameWidth: 292, 
+            frameHeight: 192
         });
 
         this.load.image('fondonivel', 'fondonivel.png');
