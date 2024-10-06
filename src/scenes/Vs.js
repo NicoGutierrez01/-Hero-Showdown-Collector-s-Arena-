@@ -25,6 +25,11 @@ export class Vs extends Scene {
         this.player1CanAttack = true;  
         this.player2CanAttack = true;  
 
+        const minutes = Math.floor(this.timeRemaining / 60);
+        const seconds = this.timeRemaining % 60;
+        const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+
 
         this.add.image(960, 540, 'fondonivel');
 
@@ -138,7 +143,7 @@ export class Vs extends Scene {
 
         this.physics.world.setBoundsCollision(true, true, true, true);
 
-        this.timerText = this.add.text(960, 50, `Time: ${this.timeRemaining}`, {
+        this.timerText = this.add.text(960, 50, formattedTime, {
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
@@ -170,12 +175,20 @@ export class Vs extends Scene {
 
     updateTimer() {
         this.timeRemaining--;
-        this.timerText.setText(`Time: ${this.timeRemaining}`);
-
+    
+        const minutes = Math.floor(this.timeRemaining / 60);
+        const seconds = this.timeRemaining % 60;
+    
+        // Asegúrate de que los segundos siempre tengan dos dígitos (ej. 01, 02, etc.)
+        const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    
+        this.timerText.setText(formattedTime);
+    
         if (this.timeRemaining <= 0) {
-            this.timerText.setText('Time: 0');
+            this.timerText.setText('0:00');
         }
     }
+    
 
     movePlayer(player, direction) {
         const speed = 400;
@@ -217,11 +230,11 @@ export class Vs extends Scene {
             const damage = Phaser.Math.Between(5, 15); 
             if (attacker === this.player1 && this.player1CanAttack) {
                 this.player1Score += damage;
-                this.player1ScoreText.setText(`Player 1: ${this.player1Score}`);
+                this.player1ScoreText.setText(`Jugador 1: ${this.player1Score}`);
                 this.player1CanAttack = false;  // Desactiva el ataque para jugador 1
             } else if (attacker === this.player2 && this.player2CanAttack) {
                 this.player2Score += damage;
-                this.player2ScoreText.setText(`Player 2: ${this.player2Score}`);
+                this.player2ScoreText.setText(`Jugador 2: ${this.player2Score}`);
                 this.player2CanAttack = false;  // Desactiva el ataque para jugador 2
             }
     
@@ -253,7 +266,7 @@ export class Vs extends Scene {
                     // Iniciar animación de explosión y actualizar puntaje
                     object.play('explode');
                     this.player1Score -= 10;  // Jugador 1 pierde puntos
-                    this.player1ScoreText.setText(`Player 1: ${this.player1Score}`);
+                    this.player1ScoreText.setText(`Juagador 1: ${this.player1Score}`);
         
                     // Esperar a que termine la animación antes de destruir la bomba
                     object.on('animationcomplete', () => {
@@ -270,7 +283,7 @@ export class Vs extends Scene {
                     // Iniciar animación de explosión y actualizar puntaje
                     object.play('explode');
                     this.player2Score -= 10;  // Jugador 2 pierde puntos
-                    this.player2ScoreText.setText(`Player 2: ${this.player2Score}`);
+                    this.player2ScoreText.setText(`Jugador 2: ${this.player2Score}`);
         
                     // Esperar a que termine la animación antes de destruir la bomba
                     object.on('animationcomplete', () => {
