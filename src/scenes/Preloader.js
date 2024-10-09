@@ -25,8 +25,21 @@ export class Preloader extends Scene
             frameHeight: 192
         });
 
+        this.load.spritesheet('animgun', 'animgun.png', {
+            frameWidth: 207,
+            frameHeight: 221
+        })
+
+        this.load.spritesheet('animspade', 'animspade.png', {
+            frameWidth: 207,
+            frameHeight: 221
+        })
+
+
         this.load.image('fondonivel', 'fondonivel.png');
+        this.load.image('titleHero', 'titleHero.png');
         this.load.image('fondomenu', 'fondomenu.png'); 
+        this.load.image('fondomode', 'fondomode.png');
         this.load.image('logo', 'logo.png');
         this.load.image('fondo', 'fondo.jpeg');
         this.load.image('negro','negro.png');

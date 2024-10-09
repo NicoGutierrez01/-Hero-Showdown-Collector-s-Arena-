@@ -29,8 +29,6 @@ export class Vs extends Scene {
         const seconds = this.timeRemaining % 60;
         const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-
-
         this.add.image(960, 540, 'fondonivel');
 
         this.physics.add.staticImage(960, 1080, 'negro').setDisplaySize(1920, 50).setOrigin(0.5, 0.5).refreshBody(); 
@@ -57,19 +55,19 @@ export class Vs extends Scene {
             key: 'walk',
             frames: this.anims.generateFrameNumbers('player', { start: 0, end: 7 }),
             frameRate: 20,
-            repeat: -1
+            repeat: 0
         });
 
         this.anims.create({
             key: 'idle',
             frames: this.anims.generateFrameNumbers('player', { start: 8, end: 13 }),
             frameRate: 12,
-            repeat: -1
+            repeat: 0
         });
         this.anims.create({
             key: 'jump',
             frames: this.anims.generateFrameNumbers('player', { start: 14, end: 17 }),
-            frameRate: 8, 
+            frameRate: 4, 
             repeat: 0  
         });
         this.anims.create({
@@ -179,7 +177,6 @@ export class Vs extends Scene {
         const minutes = Math.floor(this.timeRemaining / 60);
         const seconds = this.timeRemaining % 60;
     
-        // Asegúrate de que los segundos siempre tengan dos dígitos (ej. 01, 02, etc.)
         const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
     
         this.timerText.setText(formattedTime);
@@ -189,7 +186,6 @@ export class Vs extends Scene {
         }
     }
     
-
     movePlayer(player, direction) {
         const speed = 400;
         const jumpVelocity = -500;
@@ -204,7 +200,7 @@ export class Vs extends Scene {
             player.flipX = false;
         } else if (direction === 'up' && player.body.onFloor()) {
             player.setVelocityY(jumpVelocity);
-            player.anims.play('jump');
+            player.anims.play('jump', true);
         } else if (direction === 'down') {
             player.setVelocityY(speed);
         } else if (direction === 'action') {
@@ -213,19 +209,21 @@ export class Vs extends Scene {
         }
     }
 
-
-
     stopPlayer(player) {
         player.setVelocityX(0);
-        player.anims.play('idle', true);
+        player.on('animationcomplete', () => {
+            player.anims.play('idle', true);
+            console.log("aca")
+        });
     }
 
     attackPlayer(attacker, defender, attackerCanAttackFlag) {
         const distance = Phaser.Math.Distance.Between(attacker.x, attacker.y, defender.x, defender.y);
     
+        attacker.anims.play('action'); 
         // Solo permite el ataque si la bandera de ataque está habilitada
         if (distance < 100 && attackerCanAttackFlag) {  
-            attacker.anims.play('action', true); 
+
     
             const damage = Phaser.Math.Between(5, 15); 
             if (attacker === this.player1 && this.player1CanAttack) {
@@ -243,8 +241,6 @@ export class Vs extends Scene {
         }
     }
     
-
-
     spawnFallingObject() {
         const xPosition = Phaser.Math.Between(50, 974); 
 

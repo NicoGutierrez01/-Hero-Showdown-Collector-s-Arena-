@@ -11,6 +11,7 @@ export class Characters extends Scene {
     }
 
     create() {
+        this.add.image(960, 540, 'fondomenu');
         this.initializeCards();
         this.createUI();
     }

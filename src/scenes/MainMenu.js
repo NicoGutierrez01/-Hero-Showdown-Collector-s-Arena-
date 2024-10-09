@@ -11,11 +11,7 @@ export class MainMenu extends Scene
     {
         this.add.image(960, 540, 'fondomenu');
 
-        this.add.text(960, 300, 'Hero Showdown', {
-            fontFamily: 'Arial Black', fontSize: 100, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 3,
-            align: 'center'
-        }).setOrigin(0.5);
+        this.add.image(960, 300, 'titleHero');
 
         const buttonPlay = this.add.text(960, 450, 'Jugar', {
             fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',

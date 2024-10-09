@@ -6,6 +6,8 @@ export class Mode extends Scene {
     }
 
     create() {
+        this.add.image(960, 540, 'fondomode');
+
         const buttonVs = this.add.text(960, 270, 'Vs', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
