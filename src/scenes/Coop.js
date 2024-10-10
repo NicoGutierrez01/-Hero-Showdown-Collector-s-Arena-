@@ -9,9 +9,10 @@ export class Coop extends Scene {
         this.player1Score = 0;
         this.player2Score = 0;
         this.gameOver = false;
+        this.jawaGroup = null; // Grupo para los Jawas
     }
     
-    init(data){
+    init(data) {
         this.player1texture = data.player1;
         this.player2texture = data.player2;
     }
@@ -65,12 +66,14 @@ export class Coop extends Scene {
             frameRate: 12,
             repeat: 0
         });
+
         this.anims.create({
             key: 'jump',
             frames: this.anims.generateFrameNumbers('player', { start: 14, end: 17 }),
             frameRate: 4, 
             repeat: 0  
         });
+
         this.anims.create({
             key: 'action',
             frames: this.anims.generateFrameNumbers('player', { start: 18, end: 30 }),
@@ -86,7 +89,6 @@ export class Coop extends Scene {
         };
 
         this.anims.create(config);
-        
 
         this.inputManagerPlayer1 = new InputManager({
             scene: this,
@@ -141,6 +143,23 @@ export class Coop extends Scene {
         this.physics.add.collider(this.spawnFallingObject, this.ground);
 
         this.physics.world.setBoundsCollision(true, true, true, true);
+
+        // Crear grupo de Jawas
+        this.jawaGroup = this.physics.add.group({
+            defaultKey: 'jawa',
+            maxSize: 10
+        });
+
+        // Hacer que el jefe spawnee oleadas de Jawas
+        this.time.addEvent({
+            delay: 10000, // 10 segundos entre oleadas
+            callback: this.spawnJawaWave,
+            callbackScope: this,
+            loop: true
+        });
+
+        // Colisiones entre Jawas y el suelo
+        this.physics.add.collider(this.jawaGroup, this.ground);
     }
 
     movePlayer(player, direction) {
@@ -170,7 +189,6 @@ export class Coop extends Scene {
         player.setVelocityX(0);
         player.on('animationcomplete', () => {
             player.anims.play('idle', true);
-            console.log("aca")
         });
     }
 
@@ -179,7 +197,6 @@ export class Coop extends Scene {
 
         let element = Phaser.Math.Between(1, 1);
         let object;
-        let callback;
 
         if (element === 1) {
             object = new Bomb(this, xPosition, 0).setScale(0.4);
@@ -187,34 +204,29 @@ export class Coop extends Scene {
             // Inicializa la bandera de colisión
             object.hasCollided = false;
             
-            // Detectar colisión entre la bomba y el jugador 1
+            // Detectar colisión entre la bomba y los jugadores
             this.physics.add.overlap(object, this.player1, () => {
-                if (!object.hasCollided) {  // Verifica si ya ha colisionado
-                    object.hasCollided = true;  // Marca como colisionada   
-                    // Iniciar animación de explosión y actualizar puntaje
+                if (!object.hasCollided) {
+                    object.hasCollided = true;
                     object.play('explode');      
-                    // Esperar a que termine la animación antes de destruir la bomba
                     object.on('animationcomplete', () => {
                         object.destroy();
                     });
                 }
             });
-        
-            // Detectar colisión entre la bomba y el jugador 2
+
             this.physics.add.overlap(object, this.player2, () => {
-                if (!object.hasCollided) {  // Verifica si ya ha colisionado
-                    object.hasCollided = true;  // Marca como colisionada
-                    // Iniciar animación de explosión y actualizar puntaje
+                if (!object.hasCollided) {
+                    object.hasCollided = true;
                     object.play('explode');  
-                    // Esperar a que termine la animación antes de destruir la bomba
                     object.on('animationcomplete', () => {
                         object.destroy();
                     });
                 }
             });
         }
-        
-        this.physics.add.collider(object, this.ground, callback, null, this);
+
+        this.physics.add.collider(object, this.ground);
     }
     
     collectObject(player, object) {
@@ -223,6 +235,24 @@ export class Coop extends Scene {
             this.time.delayedCall(500, () => player.clearTint()); 
         } else {
             object.destroy(); 
+        }
+    }
+
+    // Función para generar una oleada de Jawas
+    spawnJawaWave() {
+        const numJawas = Phaser.Math.Between(3, 6); // Generar entre 3 y 6 Jawas
+
+        for (let i = 0; i < numJawas; i++) {
+            const x = Phaser.Math.Between(100, 1800); // Posiciones aleatorias
+            const jawa = this.jawaGroup.get(x, 0);
+
+            if (jawa) {
+                jawa.setActive(true);
+                jawa.setVisible(true);
+                jawa.body.setGravityY(300);
+                jawa.body.setCollideWorldBounds(true);
+                jawa.body.setVelocityX(Phaser.Math.Between(-100, 100)); // Velocidad aleatoria
+            }
         }
     }
 }

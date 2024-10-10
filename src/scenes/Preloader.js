@@ -35,7 +35,7 @@ export class Preloader extends Scene
             frameHeight: 221
         })
 
-
+        this.load.image('jawa', 'jawa.png');
         this.load.image('fondonivel', 'fondonivel.png');
         this.load.image('titleHero', 'titleHero.png');
         this.load.image('fondomenu', 'fondomenu.png'); 

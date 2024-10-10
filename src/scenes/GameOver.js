@@ -27,9 +27,9 @@ export class GameOver extends Scene {
 
         let winnerText;
         if (this.player1Score > this.player2Score) {
-            winnerText = 'Juagor 1 Gana!';
+            winnerText = 'Jugador 1 Gana!';
         } else if (this.player1Score < this.player2Score) {
-            winnerText = 'Juagor 2 Gana!';
+            winnerText = 'Jugador 2 Gana!';
         } else {
             winnerText = 'Empate!';
         }

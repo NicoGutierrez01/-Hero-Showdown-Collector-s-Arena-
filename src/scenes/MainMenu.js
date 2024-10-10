@@ -25,7 +25,7 @@ export class MainMenu extends Scene
             align: 'center'
         }).setOrigin(0.5);
 
-        const buttonCredits = this.add.text(960, 650, 'Creditos', {
+        const buttonCredits = this.add.text(960, 650, 'Créditos', {
             fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
