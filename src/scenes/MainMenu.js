@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { getPhrase } from '../service/translations';
 
 export class MainMenu extends Scene
 {
@@ -13,19 +14,19 @@ export class MainMenu extends Scene
 
         this.add.image(960, 300, 'titleHero');
 
-        const buttonPlay = this.add.text(960, 550, 'Jugar', {
+        const buttonPlay = this.add.text(960, 550, getPhrase('Jugar'), {
             fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const buttonConfig = this.add.text(960, 650, 'Configuración', {
+        const buttonConfig = this.add.text(960, 650, getPhrase('Configuración'), {
             fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const buttonCredits = this.add.text(960, 750, 'Créditos', {
+        const buttonCredits = this.add.text(960, 750, getPhrase('Créditos'), {
             fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'

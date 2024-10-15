@@ -1,7 +1,15 @@
 import { Scene } from 'phaser';
+import { getTranslations, getPhrase } from '../service/translations';
+const ES_AR= 'es-AR';
+const EN_US= 'en-US';
+const PT_BR= 'pt-BR';
+const DE_DE= 'de-DE';
 
 export class Config extends Scene
 {
+
+    #wasChangedLanguage = 'NOT_FETCHED';
+
     constructor ()
     {
         super('Config');
@@ -11,20 +19,22 @@ export class Config extends Scene
     {
         let volume = 50;
 
-        this.add.text(960, 270, 'Idioma', {
+console.log(EN_US)
+
+        this.idioma = this.add.text(960, 270, getPhrase('Idioma'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
         const flags = [
-            this.add.image(960, 370, 'Argentina').setScale(0.5),
-            this.add.image(960, 370, 'EEUU').setScale(0.1).setVisible(false),
-            this.add.image(960, 370, 'Brasil').setScale(0.3).setVisible(false)
+            {lang: ES_AR, img: this.add.image(960, 370, 'Argentina').setScale(0.5)},
+            {lang: EN_US, img: this.add.image(960, 370, 'EEUU').setScale(0.1).setVisible(false)},
+            {lang: PT_BR, img: this.add.image(960, 370, 'Brasil').setScale(0.3).setVisible(false)}
         ];
         let currentFlagIndex = 0;
 
-        this.add.text(960, 540, 'Sonido', {
+        this.sonido = this.add.text(960, 540, getPhrase('Sonido'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -33,19 +43,19 @@ export class Config extends Scene
         const volumeBarBg = this.add.rectangle(960, 640, 150, 20, 0x888888); 
         const volumeBar = this.add.rectangle(885, 640, 75, 20, 0xffffff).setOrigin(0, 0.5); 
 
-        this.add.text(960, 810, 'Pantalla', {
+        this.pantalla = this.add.text(960, 810, getPhrase('Pantalla'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const Fullscreen = this.add.text(960, 910, 'Completa', {
+        this.Fullscreen = this.add.text(960, 910, getPhrase('Completa'), {
             fontFamily: 'Arial Black', fontSize: 32, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const buttonBack = this.add.text(80, 1040, 'Atras', {
+        this.buttonBack = this.add.text(80, 1040, getPhrase('Atras'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -64,15 +74,18 @@ export class Config extends Scene
         buttonLeft.setInteractive({ cursor: 'pointer' });
 
         buttonRight.on('pointerdown', () => {
-            flags[currentFlagIndex].setVisible(false);
+            flags[currentFlagIndex].img.setVisible(false);
             currentFlagIndex = (currentFlagIndex + 1) % flags.length;
-            flags[currentFlagIndex].setVisible(true);
+            flags[currentFlagIndex].img.setVisible(true);
+            this.obtenerTraducciones(flags[currentFlagIndex].lang);
+
         });
 
         buttonLeft.on('pointerdown', () => {
-            flags[currentFlagIndex].setVisible(false);
+            flags[currentFlagIndex].img.setVisible(false);
             currentFlagIndex = (currentFlagIndex - 1 + flags.length) % flags.length;
-            flags[currentFlagIndex].setVisible(true);
+            flags[currentFlagIndex].img.setVisible(true);
+            this.obtenerTraducciones(flags[currentFlagIndex].lang);
         });
 
         buttonRight2.setInteractive({ cursor: 'pointer' });
@@ -119,11 +132,33 @@ export class Config extends Scene
             }
         });
 
-        buttonBack.setInteractive({ cursor: 'pointer' });
+        this.buttonBack.setInteractive({ cursor: 'pointer' });
 
-        buttonBack.on('pointerdown', () => {
+        this.buttonBack.on('pointerdown', () => {
             this.scene.start('MainMenu');
         });
 
+    }
+
+    update() {
+        if (this.#wasChangedLanguage === 'FETCHED') {
+            this.#wasChangedLanguage = 'NOT_FETCHED';
+            this.idioma.setText(getPhrase('Idioma'));
+            this.sonido.setText(getPhrase('Sonido'));
+            this.pantalla.setText(getPhrase('Pantalla'));
+            this.Fullscreen.setText(getPhrase('Completa'));
+            this.buttonBack.setText(getPhrase('Atras'));
+        }
+    }
+
+    updateWasChangedLanguage = () => {
+        this.#wasChangedLanguage = 'FETCHED';
+    };
+
+    async obtenerTraducciones(language) {
+        this.language = language;
+        this.#wasChangedLanguage = 'FETCHING';
+
+        await getTranslations(language, this.updateWasChangedLanguage);
     }
 }
