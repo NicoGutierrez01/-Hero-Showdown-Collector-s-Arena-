@@ -2,8 +2,6 @@ import { Scene } from 'phaser';
 import { InputManager } from '../Components/InputManager'; 
 import { inputConfigs } from '../utils/inputConfigs';
 import { Bomb } from '../Objects/Bomb';
-import { Gun } from '../Objects/Gun';
-import { Spade } from '../Objects/Spade';
 
 export class Vs extends Scene {
     constructor() {
@@ -20,6 +18,12 @@ export class Vs extends Scene {
     }
 
     create() {
+        this.anims.remove('walk');
+        this.anims.remove('idle');
+        this.anims.remove('jump');
+        this.anims.remove('action');
+
+
         this.timeRemaining = this.gameDuration / 1000; 
 
         this.player1CanAttack = true;  
@@ -53,26 +57,26 @@ export class Vs extends Scene {
 
         this.anims.create({
             key: 'walk',
-            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 7 }),
+            frames: this.anims.generateFrameNumbers('playerspade', { start: 0, end: 7 }),
             frameRate: 20,
             repeat: 0
         });
 
         this.anims.create({
             key: 'idle',
-            frames: this.anims.generateFrameNumbers('player', { start: 8, end: 13 }),
+            frames: this.anims.generateFrameNumbers('playerspade', { start: 8, end: 13 }),
             frameRate: 12,
             repeat: 0
         });
         this.anims.create({
             key: 'jump',
-            frames: this.anims.generateFrameNumbers('player', { start: 14, end: 17 }),
+            frames: this.anims.generateFrameNumbers('playerspade', { start: 14, end: 17 }),
             frameRate: 4, 
             repeat: 0  
         });
         this.anims.create({
             key: 'action',
-            frames: this.anims.generateFrameNumbers('player', { start: 18, end: 30 }),
+            frames: this.anims.generateFrameNumbers('playerspade', { start: 18, end: 30 }),
             frameRate: 30, 
             repeat: 0  
         });
@@ -244,11 +248,9 @@ export class Vs extends Scene {
     spawnFallingObject() {
         const xPosition = Phaser.Math.Between(50, 974); 
 
-        let element = Phaser.Math.Between(1, 3);
         let object;
         let callback;
 
-        if (element === 1) {
             object = new Bomb(this, xPosition, 0).setScale(0.4);
         
             // Inicializa la bandera de colisión
@@ -287,37 +289,6 @@ export class Vs extends Scene {
                     });
                 }
             });
-        }
-                
-        if (element === 2) {
-            object = new Gun(this, xPosition, 0).setScale(0.15);       
-            this.physics.add.overlap(object, this.player1, () => {
-                // Acción cuando el jugador colisiona con el arma y la recoge
-                object.destroy(); // Elimina el objeto del mundo 
-            });
-        
-            this.physics.add.overlap(object, this.player2, () => {
-                // Acción cuando el jugador colisiona con el arma y la recoge
-                object.destroy(); // Elimina el objeto del mundo 
-            });
-        }
-        
-        if (element === 3) {
-            object = new Spade(this, xPosition, 0).setScale(0.1); 
-            this.physics.add.overlap(object, this.player1, () => {
-                // Acción cuando el jugador colisiona con la pala y la recoge
-                object.destroy(); // Elimina el objeto del mundo 
-            });
-        
-            this.physics.add.overlap(object, this.player2, () => {
-                // Acción cuando el jugador colisiona con la pala y la recoge
-                object.destroy(); // Elimina el objeto del mundo 
-            });
-
-            callback = () => {
-                // Acciones después de que la pala colisione
-            };
-        }
 
         this.physics.add.collider(object, this.ground, callback, null, this);
     }

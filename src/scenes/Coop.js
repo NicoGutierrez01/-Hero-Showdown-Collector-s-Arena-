@@ -21,8 +21,18 @@ export class Coop extends Scene {
     }
 
     create() {
+        this.anims.remove('walk');
+        this.anims.remove('idle');
+        this.anims.remove('jump');
+        this.anims.remove('action');
         this.player1CanAttack = true;  
         this.player2CanAttack = true;  
+
+        this.jawaGroup = this.physics.add.group({
+            runChildUpdate: true  
+        });
+        
+
 
         this.add.image(960, 540, 'fondonivel');
         this.devil = this.add.image(512, 100, 'devil').setScale(0.36);
@@ -159,6 +169,13 @@ export class Coop extends Scene {
         this.physics.add.collider(this.spawnJawaWave, this.ground);
     }
 
+    update() {
+        this.jawaGroup.children.iterate(jawa => {
+            jawa.followPlayer(this.player1, this.player2);
+        });
+    }
+    
+
     movePlayer(player, direction) {
         const speed = 400;
         const jumpVelocity = -500;
@@ -239,7 +256,10 @@ export class Coop extends Scene {
         for (let i = 0; i < numJawas; i++) {
             const x = Phaser.Math.Between(100, 1800); 
             const jawa = new Jawa(this, x, 0);  
+            this.jawaGroup.add(jawa);
         }
+
+        this.physics.add.collider(this.jawaGroup, this.ground);
     }
     
 }

@@ -15,16 +15,6 @@ export class Preloader extends Scene
 
         this.load.setPath('assets');
 
-        this.load.spritesheet('playergun', 'animgun.png', {
-            frameWidth: 207, 
-            frameHeight: 221 
-        });
-
-        this.load.spritesheet('playerspade', 'animspade', {
-            frameWidth: 207,
-            frameHeight: 221
-        })
-
         this.load.spritesheet('player', 'animPJ.png', {
             frameWidth: 207, 
             frameHeight: 221 
@@ -35,12 +25,12 @@ export class Preloader extends Scene
             frameHeight: 192
         });
 
-        this.load.spritesheet('animgun', 'animgun.png', {
+        this.load.spritesheet('playergun', 'animgun.png', {
             frameWidth: 207,
             frameHeight: 221
         })
 
-        this.load.spritesheet('animspade', 'animspade.png', {
+        this.load.spritesheet('playerspade', 'animspade.png', {
             frameWidth: 207,
             frameHeight: 221
         })
