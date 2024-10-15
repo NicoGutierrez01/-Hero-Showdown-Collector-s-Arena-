@@ -8,17 +8,11 @@ export class Mode extends Scene {
     create() {
         this.add.image(960, 540, 'fondomode');
 
-        const buttonVs = this.add.text(960, 270, 'Vs', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5);
+        const buttonVs = this.add.zone(960, 270, 1920, 540).setOrigin(0.5);
+        buttonVs.setInteractive();
 
-        const buttonCoop = this.add.text(960, 810, 'Coop', {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5);
+        const buttonCoop = this.add.zone(960, 810, 1920, 540).setOrigin(0.5);
+        buttonCoop.setInteractive();
 
         const buttonBack = this.add.text(80, 1040, 'Atras', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',

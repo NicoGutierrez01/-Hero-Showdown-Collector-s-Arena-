@@ -15,6 +15,16 @@ export class Preloader extends Scene
 
         this.load.setPath('assets');
 
+        this.load.spritesheet('playergun', 'animgun.png', {
+            frameWidth: 207, 
+            frameHeight: 221 
+        });
+
+        this.load.spritesheet('playerspade', 'animspade', {
+            frameWidth: 207,
+            frameHeight: 221
+        })
+
         this.load.spritesheet('player', 'animPJ.png', {
             frameWidth: 207, 
             frameHeight: 221 
@@ -49,7 +59,6 @@ export class Preloader extends Scene
         this.load.image('panda','panda.png');
         this.load.image('zombie','zombie.png');
         this.load.image('shelly','shelly.png');
-        this.load.image('title', 'title.png');
         this.load.image('triangle', 'triangle.png');
         this.load.image('Argentina', 'Argentina.webp');
         this.load.image('Brasil', 'Brasil.png');
@@ -70,6 +79,7 @@ export class Preloader extends Scene
         this.load.image('shellytitle', 'shellytitle.png');
         this.load.image('hierrotitle', 'hierrotitle.png');
         this.load.image('zombietitle', 'zombietitle.png');
+        this.load.image('titleHero', 'titleHero.png');
 
 
         this.load.setPath('video');

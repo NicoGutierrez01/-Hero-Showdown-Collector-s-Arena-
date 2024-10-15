@@ -2,6 +2,9 @@ import { Scene } from 'phaser';
 import { InputManager } from '../Components/InputManager'; 
 import { inputConfigs } from '../utils/inputConfigs';
 import { Bomb } from '../Objects/Bomb';
+import { Jawa } from '../Objects/Jawas';
+import { Bullet } from '../Objects/Bullet';
+
 
 export class Coop extends Scene {
     constructor() {
@@ -9,7 +12,7 @@ export class Coop extends Scene {
         this.player1Score = 0;
         this.player2Score = 0;
         this.gameOver = false;
-        this.jawaGroup = null; // Grupo para los Jawas
+        this.jawaGroup = null; 
     }
     
     init(data) {
@@ -22,7 +25,7 @@ export class Coop extends Scene {
         this.player2CanAttack = true;  
 
         this.add.image(960, 540, 'fondonivel');
-        this.devil = this.add.image(512, 100, 'devil').setScale(0.2);
+        this.devil = this.add.image(512, 100, 'devil').setScale(0.36);
 
         this.tweens.add({
             targets: this.devil,
@@ -55,28 +58,28 @@ export class Coop extends Scene {
 
         this.anims.create({
             key: 'walk',
-            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 7 }),
+            frames: this.anims.generateFrameNumbers('playergun', { start: 0, end: 7 }),
             frameRate: 20,
             repeat: 0
         });
 
         this.anims.create({
             key: 'idle',
-            frames: this.anims.generateFrameNumbers('player', { start: 8, end: 13 }),
+            frames: this.anims.generateFrameNumbers('playergun', { start: 8, end: 13 }),
             frameRate: 12,
             repeat: 0
         });
 
         this.anims.create({
             key: 'jump',
-            frames: this.anims.generateFrameNumbers('player', { start: 14, end: 17 }),
+            frames: this.anims.generateFrameNumbers('playergun', { start: 14, end: 17 }),
             frameRate: 4, 
             repeat: 0  
         });
 
         this.anims.create({
             key: 'action',
-            frames: this.anims.generateFrameNumbers('player', { start: 18, end: 30 }),
+            frames: this.anims.generateFrameNumbers('playergun', { start: 18, end: 30 }),
             frameRate: 30, 
             repeat: 0  
         });
@@ -144,12 +147,6 @@ export class Coop extends Scene {
 
         this.physics.world.setBoundsCollision(true, true, true, true);
 
-        // Crear grupo de Jawas
-        this.jawaGroup = this.physics.add.group({
-            defaultKey: 'jawa',
-            maxSize: 10
-        });
-
         // Hacer que el jefe spawnee oleadas de Jawas
         this.time.addEvent({
             delay: 10000, // 10 segundos entre oleadas
@@ -159,7 +156,7 @@ export class Coop extends Scene {
         });
 
         // Colisiones entre Jawas y el suelo
-        this.physics.add.collider(this.jawaGroup, this.ground);
+        this.physics.add.collider(this.spawnJawaWave, this.ground);
     }
 
     movePlayer(player, direction) {
@@ -201,10 +198,8 @@ export class Coop extends Scene {
         if (element === 1) {
             object = new Bomb(this, xPosition, 0).setScale(0.4);
         
-            // Inicializa la bandera de colisión
             object.hasCollided = false;
             
-            // Detectar colisión entre la bomba y los jugadores
             this.physics.add.overlap(object, this.player1, () => {
                 if (!object.hasCollided) {
                     object.hasCollided = true;
@@ -238,21 +233,13 @@ export class Coop extends Scene {
         }
     }
 
-    // Función para generar una oleada de Jawas
     spawnJawaWave() {
-        const numJawas = Phaser.Math.Between(3, 6); // Generar entre 3 y 6 Jawas
-
+        const numJawas = Phaser.Math.Between(3, 6); 
+    
         for (let i = 0; i < numJawas; i++) {
-            const x = Phaser.Math.Between(100, 1800); // Posiciones aleatorias
-            const jawa = this.jawaGroup.get(x, 0);
-
-            if (jawa) {
-                jawa.setActive(true);
-                jawa.setVisible(true);
-                jawa.body.setGravityY(300);
-                jawa.body.setCollideWorldBounds(true);
-                jawa.body.setVelocityX(Phaser.Math.Between(-100, 100)); // Velocidad aleatoria
-            }
+            const x = Phaser.Math.Between(100, 1800); 
+            const jawa = new Jawa(this, x, 0);  
         }
     }
+    
 }

@@ -13,19 +13,19 @@ export class MainMenu extends Scene
 
         this.add.image(960, 300, 'titleHero');
 
-        const buttonPlay = this.add.text(960, 450, 'Jugar', {
+        const buttonPlay = this.add.text(960, 550, 'Jugar', {
             fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const buttonConfig = this.add.text(960, 550, 'Configuración', {
+        const buttonConfig = this.add.text(960, 650, 'Configuración', {
             fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        const buttonCredits = this.add.text(960, 650, 'Créditos', {
+        const buttonCredits = this.add.text(960, 750, 'Créditos', {
             fontFamily: 'Arial Black', fontSize: 50, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
