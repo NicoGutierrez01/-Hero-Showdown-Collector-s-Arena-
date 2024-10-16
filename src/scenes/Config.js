@@ -19,7 +19,7 @@ export class Config extends Scene
     {
         let volume = 50;
 
-console.log(EN_US)
+        this.obtenerTraducciones(ES_AR);
 
         this.idioma = this.add.text(960, 270, getPhrase('Idioma'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
@@ -115,20 +115,20 @@ console.log(EN_US)
         buttonRight3.on('pointerdown', () => {
             if (this.scale.isFullscreen) {
                 this.scale.stopFullscreen();
-                Fullscreen.setText('Completa');
+                this.Fullscreen.setText(getPhrase('Completa'));
             } else {
                 this.scale.startFullscreen();
-                Fullscreen.setText('Minimizar');
+                this.Fullscreen.setText(getPhrase('Minimizar'));
             }
         });
 
         buttonLeft3.on('pointerdown', () => {
             if (this.scale.isFullscreen) {
                 this.scale.stopFullscreen();
-                Fullscreen.setText('Completa');
+                this.Fullscreen.setText(getPhrase('Completa'));
             } else {
                 this.scale.startFullscreen();
-                Fullscreen.setText('Minimizar');
+                this.Fullscreen.setText(getPhrase('Minimizar'));
             }
         });
 
@@ -147,6 +147,7 @@ console.log(EN_US)
             this.sonido.setText(getPhrase('Sonido'));
             this.pantalla.setText(getPhrase('Pantalla'));
             this.Fullscreen.setText(getPhrase('Completa'));
+            this.Fullscreen.setText(getPhrase('Minimizar'));
             this.buttonBack.setText(getPhrase('Atras'));
         }
     }

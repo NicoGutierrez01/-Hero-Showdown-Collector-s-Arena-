@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { getPhrase } from '../service/translations';
 
 export class GameOver extends Scene {
     constructor() {
@@ -13,13 +14,13 @@ export class GameOver extends Scene {
     create() {
         this.add.image(960, 540, 'fondomenu');
 
-        this.add.text(480, 440, `Puntos jugador 1: ${this.player1Score}`, {
+        this.add.text(480, 440, getPhrase(`Puntos jugador 1: ${this.player1Score}`), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
-        this.add.text(1440, 440, `Puntos jugador 2: ${this.player2Score}`, {
+        this.add.text(1440, 440, getPhrase(`Puntos jugador 2: ${this.player2Score}`), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -27,18 +28,18 @@ export class GameOver extends Scene {
 
         let winnerText;
         if (this.player1Score > this.player2Score) {
-            winnerText = 'Jugador 1 Gana!';
+            winnerText = getPhrase('Jugador 1 Gana!');
         } else if (this.player1Score < this.player2Score) {
-            winnerText = 'Jugador 2 Gana!';
+            winnerText = getPhrase('Jugador 2 Gana!');
         } else {
-            winnerText = 'Empate!';
+            winnerText = getPhrase('Empate!');
         }
 
         this.add.text(960, 540, winnerText, {
             fontFamily: 'Arial', fontSize: 64, color: '#FFD700'
         }).setOrigin(0.5);
 
-        const buttonBack = this.add.text(80, 1040, 'Atras', {
+        const buttonBack = this.add.text(80, 1040, getPhrase('Atras'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'

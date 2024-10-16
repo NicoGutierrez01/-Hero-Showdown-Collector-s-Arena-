@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { getPhrase } from '../service/translations';
 
 export class Credits extends Scene
 {
@@ -15,7 +16,7 @@ export class Credits extends Scene
             align: 'center'
         }).setOrigin(0.5);
 
-        const buttonBack = this.add.text(80, 1040, 'Atras', {
+        const buttonBack = this.add.text(80, 1040, getPhrase('Atras'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'

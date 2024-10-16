@@ -4,6 +4,7 @@ import { inputConfigs } from '../utils/inputConfigs';
 import { Bomb } from '../Objects/Bomb';
 import { Jawa } from '../Objects/Jawas';
 import { Bullet } from '../Objects/Bullet';
+import { getPhrase } from '../service/translations';
 
 
 export class Coop extends Scene {
@@ -129,7 +130,7 @@ export class Coop extends Scene {
             }
         });
 
-        const buttonBack = this.add.text(80, 40, 'Atras', {
+        const buttonBack = this.add.text(80, 40, getPhrase ('Atras'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'

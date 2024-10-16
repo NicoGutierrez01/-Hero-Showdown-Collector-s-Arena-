@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { Card } from '../Components/Card';
+import { getPhrase } from '../service/translations';
 
 export class Characters extends Scene {
     constructor() {
@@ -75,7 +76,7 @@ export class Characters extends Scene {
     }
 
     createUI() {
-        const buttonBack = this.add.text(80, 1040, 'Atras', {
+        const buttonBack = this.add.text(80, 1040, getPhrase('Atras'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -93,7 +94,7 @@ export class Characters extends Scene {
             this.startMessage.destroy();
         }
 
-        this.startMessage = this.add.text(this.scale.width / 2, this.scale.height / 2, 'Comenzar', {
+        this.startMessage = this.add.text(this.scale.width / 2, this.scale.height / 2, getPhrase('Comenzar'), {
             fontFamily: 'Arial Black', fontSize: 48, color: '#00ff00',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'

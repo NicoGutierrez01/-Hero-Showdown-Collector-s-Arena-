@@ -1,4 +1,5 @@
 import { Scene } from 'phaser';
+import { getPhrase } from '../service/translations';
 
 export class Mode extends Scene {
     constructor() {
@@ -14,7 +15,7 @@ export class Mode extends Scene {
         const buttonCoop = this.add.zone(960, 810, 1920, 540).setOrigin(0.5);
         buttonCoop.setInteractive();
 
-        const buttonBack = this.add.text(80, 1040, 'Atras', {
+        const buttonBack = this.add.text(80, 1040, getPhrase ('Atras'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'

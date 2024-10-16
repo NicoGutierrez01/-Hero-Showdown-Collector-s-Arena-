@@ -2,6 +2,7 @@ import { Scene } from 'phaser';
 import { InputManager } from '../Components/InputManager'; 
 import { inputConfigs } from '../utils/inputConfigs';
 import { Bomb } from '../Objects/Bomb';
+import { getPhrase } from '../service/translations';
 
 export class Vs extends Scene {
     constructor() {
@@ -117,7 +118,7 @@ export class Vs extends Scene {
             }
         });
 
-        const buttonBack = this.add.text(80, 40, 'Atras', {
+        const buttonBack = this.add.text(80, 40, getPhrase('Atras'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -149,11 +150,11 @@ export class Vs extends Scene {
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
-        this.player1ScoreText = this.add.text(620, 50, 'Jugador 1 :',{
+        this.player1ScoreText = this.add.text(620, 50, getPhrase('Jugador 1 :'),{
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
-        this.player2ScoreText = this.add.text(1300, 50, 'Jugador 2 :',{
+        this.player2ScoreText = this.add.text(1300, 50, getPhrase('Jugador 2 :'),{
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
@@ -232,11 +233,11 @@ export class Vs extends Scene {
             const damage = Phaser.Math.Between(5, 15); 
             if (attacker === this.player1 && this.player1CanAttack) {
                 this.player1Score += damage;
-                this.player1ScoreText.setText(`Jugador 1: ${this.player1Score}`);
+                this.player1ScoreText.setText(getPhrase(`Jugador 1: ${this.player1Score}`));
                 this.player1CanAttack = false;  // Desactiva el ataque para jugador 1
             } else if (attacker === this.player2 && this.player2CanAttack) {
                 this.player2Score += damage;
-                this.player2ScoreText.setText(`Jugador 2: ${this.player2Score}`);
+                this.player2ScoreText.setText(getPhrase(`Jugador 2: ${this.player2Score}`));
                 this.player2CanAttack = false;  // Desactiva el ataque para jugador 2
             }
     
@@ -264,7 +265,7 @@ export class Vs extends Scene {
                     // Iniciar animación de explosión y actualizar puntaje
                     object.play('explode');
                     this.player1Score -= 10;  // Jugador 1 pierde puntos
-                    this.player1ScoreText.setText(`Juagador 1: ${this.player1Score}`);
+                    this.player1ScoreText.setText(getPhrase(`Jugador 1: ${this.player1Score}`));
         
                     // Esperar a que termine la animación antes de destruir la bomba
                     object.on('animationcomplete', () => {
@@ -281,7 +282,7 @@ export class Vs extends Scene {
                     // Iniciar animación de explosión y actualizar puntaje
                     object.play('explode');
                     this.player2Score -= 10;  // Jugador 2 pierde puntos
-                    this.player2ScoreText.setText(`Jugador 2: ${this.player2Score}`);
+                    this.player2ScoreText.setText(getPhrase(`Jugador 2: ${this.player2Score}`));
         
                     // Esperar a que termine la animación antes de destruir la bomba
                     object.on('animationcomplete', () => {
