@@ -226,7 +226,6 @@ export class Vs extends Scene {
         const distance = Phaser.Math.Distance.Between(attacker.x, attacker.y, defender.x, defender.y);
     
         attacker.anims.play('action'); 
-        // Solo permite el ataque si la bandera de ataque está habilitada
         if (distance < 100 && attackerCanAttackFlag) {  
 
     
@@ -234,11 +233,11 @@ export class Vs extends Scene {
             if (attacker === this.player1 && this.player1CanAttack) {
                 this.player1Score += damage;
                 this.player1ScoreText.setText(getPhrase(`Jugador 1: ${this.player1Score}`));
-                this.player1CanAttack = false;  // Desactiva el ataque para jugador 1
+                this.player1CanAttack = false;  
             } else if (attacker === this.player2 && this.player2CanAttack) {
                 this.player2Score += damage;
                 this.player2ScoreText.setText(getPhrase(`Jugador 2: ${this.player2Score}`));
-                this.player2CanAttack = false;  // Desactiva el ataque para jugador 2
+                this.player2CanAttack = false;  
             }
     
             defender.setTint(0xff0000); 
