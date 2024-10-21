@@ -9,6 +9,9 @@ import { Coop } from './scenes/Coop';
 import { Mode } from './scenes/Mode';
 import { Config } from './scenes/Config';
 import { Credits } from './scenes/Credits';
+import { AnimsVs } from './Anims/AnimsVs';
+import { Game } from 'phaser';
+import { GameOver2 } from './scenes/GameOver2';
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -34,6 +37,8 @@ const config = {
         Preloader,
         MainMenu,
         GameOver,
+        GameOver2,
+        AnimsVs,
         Characters,
         Inicio,
         Mode,

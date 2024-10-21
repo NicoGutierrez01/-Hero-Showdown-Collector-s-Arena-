@@ -34,7 +34,7 @@ export class Vs extends Scene {
         const seconds = this.timeRemaining % 60;
         const formattedTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-        this.add.image(960, 540, 'fondonivel');
+        this.add.image(960, 540, 'fondovs');
 
         this.physics.add.staticImage(960, 1080, 'negro').setDisplaySize(1920, 50).setOrigin(0.5, 0.5).refreshBody(); 
         this.ground = this.physics.add.staticGroup();

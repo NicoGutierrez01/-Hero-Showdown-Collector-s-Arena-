@@ -15,7 +15,7 @@ export class Coop extends Scene {
         this.gameOver = false;
         this.jawaGroup = null; 
         this.sharedScore = 0;
-
+        this.jawasilled = 0;
     }
     
     init(data) {
@@ -35,7 +35,7 @@ export class Coop extends Scene {
             runChildUpdate: true  
         });
         
-        this.add.image(960, 540, 'fondonivel');
+        this.add.image(960, 540, 'fondocoop');
         this.devil = this.add.image(512, 100, 'devil').setScale(0.36);
 
         this.scoreText = this.add.text(1300, 50, getPhrase('Puntaje : '),{
@@ -179,7 +179,6 @@ export class Coop extends Scene {
         });
     }
     
-
     movePlayer(player, direction) {
         const speed = 400;
         const jumpVelocity = -500;
@@ -315,6 +314,11 @@ export class Coop extends Scene {
             this.physics.add.collider(bullet, targetJawa, (bullet, jawa) => {
                 jawa.destroy();
                 bullet.destroy();
+
+                const sharedScore = Phaser.Math.Between(5, 20);
+
+                this.sharedScore += sharedScore;  
+                this.scoreText.setText(getPhrase('Puntaje : ') + this.sharedScore);  
             });
         }
     
@@ -327,7 +331,5 @@ export class Coop extends Scene {
         this.time.delayedCall(500, () => {
             playerCanAttack = true;  
         });
-    }
-    
-     
+    }  
 }
