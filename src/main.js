@@ -10,7 +10,6 @@ import { Mode } from './scenes/Mode';
 import { Config } from './scenes/Config';
 import { Credits } from './scenes/Credits';
 import { AnimsVs } from './Anims/AnimsVs';
-import { Game } from 'phaser';
 import { GameOver2 } from './scenes/GameOver2';
 
 //  Find out more information about the Game Config at:

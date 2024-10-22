@@ -118,18 +118,6 @@ export class Vs extends Scene {
             }
         });
 
-        const buttonBack = this.add.text(80, 40, getPhrase('Atras'), {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5);
-
-        buttonBack.setInteractive({ cursor: 'pointer' });
-
-        buttonBack.on('pointerdown', () => {
-            this.scene.start('MainMenu');
-        });
-
         this.fallingObjects = this.physics.add.group();
 
         this.time.addEvent({

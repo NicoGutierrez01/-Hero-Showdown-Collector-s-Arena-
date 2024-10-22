@@ -93,11 +93,11 @@ export class Preloader extends Scene
         //subditos
         this.load.image('jawaA', 'jawaA.png');
         this.load.image('jawaV', 'jawaV.png');
-        
-        //logo
-        this.load.image('logo', 'logo.png');
 
+        //platforms
+        this.load.image('platform', 'platform.png');
         this.load.image('negro','negro.png');
+        
         this.load.image('triangle', 'triangle.png');
 
         this.load.setPath('video');
@@ -108,7 +108,6 @@ export class Preloader extends Scene
 
     create ()
     {
-
         this.scene.start('Inicio');
     }
 }

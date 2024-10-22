@@ -14,13 +14,23 @@ export class Coop extends Scene {
         this.player2Score = 0;
         this.gameOver = false;
         this.jawaGroup = null; 
-        this.sharedScore = 0;
-        this.jawasilled = 0;
+        this.initialScore = 0;
+        this.jawasKilled = 0;
+        this.initialLives = 3;
+        this.initialSpawnDelay = 10000; 
+        this.initialJawaSpeed = 100; 
+        this.spawnMultiplier = 0.95; 
+        this.speedIncrement = 20;
     }
     
     init(data) {
         this.player1texture = data.player1;
         this.player2texture = data.player2;
+        this.spawnDelay = this.initialSpawnDelay; 
+        this.jawaSpeed = this.initialJawaSpeed;
+        this.sharedLives = this.initialLives;
+        this.jawasKilled = 0;
+        this.sharedScore = this.initialScore;
     }
 
     create() {
@@ -38,7 +48,11 @@ export class Coop extends Scene {
         this.add.image(960, 540, 'fondocoop');
         this.devil = this.add.image(512, 100, 'devil').setScale(0.36);
 
-        this.scoreText = this.add.text(1300, 50, getPhrase('Puntaje : '),{
+        this.scoreText = this.add.text(1780, 50, getPhrase('Puntaje : '),{
+            fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
+        }).setOrigin(0.5);
+
+        this.livesText = this.add.text(100, 50, `Vidas: ${this.sharedLives}`, {
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
@@ -134,18 +148,6 @@ export class Coop extends Scene {
             }
         });
 
-        const buttonBack = this.add.text(80, 40, getPhrase ('Atras'), {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5);
-
-        buttonBack.setInteractive({ cursor: 'pointer' });
-
-        buttonBack.on('pointerdown', () => {
-            this.scene.start('MainMenu');
-        });
-
         this.fallingObjects = this.physics.add.group();
 
         this.time.addEvent({
@@ -164,13 +166,16 @@ export class Coop extends Scene {
 
 
         this.time.addEvent({
-            delay: 10000,
+            delay: this.spawnDelay,
             callback: this.spawnJawaWave,
             callbackScope: this,
             loop: true
         });
 
         this.physics.add.collider(this.spawnJawaWave, this.ground);
+
+        this.physics.add.overlap(this.player1, this.jawaGroup, this.jawaCollision, null, this);
+        this.physics.add.overlap(this.player2, this.jawaGroup, this.jawaCollision, null, this);
     }
 
     update() {
@@ -254,17 +259,34 @@ export class Coop extends Scene {
     }
 
     spawnJawaWave() {
-        const numJawas = Phaser.Math.Between(3, 6); 
-        
+        const numJawas = Phaser.Math.Between(3, 6);
+    
         for (let i = 0; i < numJawas; i++) {
-            const x = Phaser.Math.Between(100, 1800); 
-            const jawaTexture = Phaser.Math.Between(0, 1) === 0 ? 'jawaA' : 'jawaV';  
-            const jawa = new Jawa(this, x, 0, jawaTexture);  
-            this.jawaGroup.add(jawa);
+            const x = Phaser.Math.Between(100, 1800);
+            const jawaTexture = Phaser.Math.Between(0, 1) === 0 ? 'jawaA' : 'jawaV';
+            const jawa = new Jawa(this, x, 0, jawaTexture);
+    
+            jawa.setVelocityX(this.jawaSpeed);  // Establece la velocidad de los Jawas
+            this.jawaGroup.add(jawa);           // Añade los Jawas al grupo
         }
     
+        this.jawaSpeed += this.speedIncrement;  // Incrementa la velocidad de los Jawas
+        this.spawnDelay = Math.max(this.spawnDelay * this.spawnMultiplier, 2000);  // Reduce el tiempo de spawn
+    
+        // Asegúrate de que los Jawas colisionen con el suelo/plataformas
         this.physics.add.collider(this.jawaGroup, this.ground);
+    
+        // Actualiza el evento de generación de Jawas
+        this.time.removeAllEvents();
+        this.time.addEvent({
+            delay: this.spawnDelay,
+            callback: this.spawnJawaWave,
+            callbackScope: this,
+            loop: true
+        });
     }
+    
+
 
     findClosestJawa(player, jawaGroup) {
         let closestJawa = null;
@@ -332,4 +354,22 @@ export class Coop extends Scene {
             playerCanAttack = true;  
         });
     }  
+
+    jawaCollision(player, jawa) {
+        jawa.destroy();
+
+        this.sharedLives--;
+        this.jawasKilled++;
+
+        this.livesText.setText(`Vidas: ${this.sharedLives}`);
+
+        console.log(`sharedLives: ${this.sharedLives}, sharedScore: ${this.sharedScore}, jawasKilled: ${this.jawasKilled}`);
+
+        if (this.sharedLives <= 0) {
+            this.scene.start('GameOver2', { 
+                sharedScore: this.sharedScore, 
+                jawasKilled: this.jawasKilled 
+            });
+        } 
+    }    
 }
