@@ -9,7 +9,6 @@ import { Coop } from './scenes/Coop';
 import { Mode } from './scenes/Mode';
 import { Config } from './scenes/Config';
 import { Credits } from './scenes/Credits';
-import { AnimsVs } from './Anims/AnimsVs';
 import { GameOver2 } from './scenes/GameOver2';
 
 //  Find out more information about the Game Config at:
@@ -37,7 +36,6 @@ const config = {
         MainMenu,
         GameOver,
         GameOver2,
-        AnimsVs,
         Characters,
         Inicio,
         Mode,

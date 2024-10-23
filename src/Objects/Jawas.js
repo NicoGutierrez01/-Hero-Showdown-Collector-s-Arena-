@@ -9,24 +9,24 @@ export class Jawa extends Phaser.Physics.Arcade.Sprite {
         this.setCollideWorldBounds(true); 
     }
 
-    followPlayer(player1, player2) {
+    followPlayer(player1, player2, moveSpeed) {
         const player1Distance = Phaser.Math.Distance.Between(this.x, this.y, player1.x, player1.y);
         const player2Distance = Phaser.Math.Distance.Between(this.x, this.y, player2.x, player2.y);
 
         let targetPlayer = player1Distance < player2Distance ? player1 : player2;
 
-        const speed = 100;  // Velocidad con la que seguirá al jugador
+        const speed = moveSpeed;  
 
         if (this.x < targetPlayer.x) {
-            this.setVelocityX(speed);  // Mover a la derecha
+            this.setVelocityX(speed);  
         } else if (this.x > targetPlayer.x) {
-            this.setVelocityX(-speed); // Mover a la izquierda
+            this.setVelocityX(-speed);
         }
 
         if (this.y < targetPlayer.y) {
-            this.setVelocityY(speed);   // Mover hacia abajo (si lo necesitas)
+            this.setVelocityY(speed);   
         } else if (this.y > targetPlayer.y) {
-            this.setVelocityY(-speed);  // Mover hacia arriba (si lo necesitas)
+            this.setVelocityY(-speed);  
         }
     }
 }

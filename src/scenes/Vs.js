@@ -11,6 +11,7 @@ export class Vs extends Scene {
         this.player1Score = 0;
         this.player2Score = 0;
         this.gameOver = false;
+        this.baseTexture = "spade";
     }
     
     init(data){
@@ -57,30 +58,61 @@ export class Vs extends Scene {
         this.physics.add.collider(this.player2, this.ground);        
 
         this.anims.create({
-            key: 'walk',
-            frames: this.anims.generateFrameNumbers('playerspade', { start: 0, end: 7 }),
+            key: 'walk-1',
+            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 0, end: 7 }),
             frameRate: 20,
             repeat: 0
         });
 
         this.anims.create({
-            key: 'idle',
-            frames: this.anims.generateFrameNumbers('playerspade', { start: 8, end: 13 }),
+            key: 'idle-1',
+            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 8, end: 13 }),
             frameRate: 12,
             repeat: 0
         });
+
         this.anims.create({
-            key: 'jump',
-            frames: this.anims.generateFrameNumbers('playerspade', { start: 14, end: 17 }),
+            key: 'jump-1',
+            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 14, end: 17 }),
             frameRate: 4, 
             repeat: 0  
         });
+
         this.anims.create({
-            key: 'action',
-            frames: this.anims.generateFrameNumbers('playerspade', { start: 18, end: 30 }),
-            frameRate: 30, 
+            key: 'action-1',
+            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 18, end: 30 }),
+            frameRate: 15, 
             repeat: 0  
         });
+
+        this.anims.create({
+            key: 'walk-2',
+            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 0, end: 7 }),
+            frameRate: 20,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'idle-2',
+            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 8, end: 13 }),
+            frameRate: 12,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'jump-2',
+            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 14, end: 17 }),
+            frameRate: 4, 
+            repeat: 0  
+        });
+
+        this.anims.create({
+            key: 'action-2',
+            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 18, end: 30 }),
+            frameRate: 15, 
+            repeat: 0  
+        });
+
 
         const config = {
             key: 'explode',
@@ -185,27 +217,27 @@ export class Vs extends Scene {
 
         if (direction === 'left') {
             player.setVelocityX(-speed);
-            player.anims.play('walk', true);
+            player.anims.play(`walk-${player.number}`, true);
             player.flipX = true;
         } else if (direction === 'right') {
             player.setVelocityX(speed);
-            player.anims.play('walk', true);
+            player.anims.play(`walk-${player.number}`, true);
             player.flipX = false;
         } else if (direction === 'up' && player.body.onFloor()) {
             player.setVelocityY(jumpVelocity);
-            player.anims.play('jump', true);
+            player.anims.play(`jump-${player.number}`, true);
         } else if (direction === 'down') {
             player.setVelocityY(speed);
         } else if (direction === 'action') {
             player.setVelocityX(0);
-            player.anims.play('action', true);
+            player.anims.play(`action-${player.number}`, true);
         }
     }
 
     stopPlayer(player) {
         player.setVelocityX(0);
         player.on('animationcomplete', () => {
-            player.anims.play('idle', true);
+            player.anims.play(`idle-${player.number}`, true);
             console.log("aca")
         });
     }
@@ -213,7 +245,7 @@ export class Vs extends Scene {
     attackPlayer(attacker, defender, attackerCanAttackFlag) {
         const distance = Phaser.Math.Distance.Between(attacker.x, attacker.y, defender.x, defender.y);
     
-        attacker.anims.play('action'); 
+        attacker.anims.play(`action-${player.number}`); 
         if (distance < 100 && attackerCanAttackFlag) {  
 
     
@@ -241,37 +273,30 @@ export class Vs extends Scene {
 
             object = new Bomb(this, xPosition, 0).setScale(0.4);
         
-            // Inicializa la bandera de colisión
             object.hasCollided = false;
             
-            // Detectar colisión entre la bomba y el jugador 1
             this.physics.add.overlap(object, this.player1, () => {
-                if (!object.hasCollided) {  // Verifica si ya ha colisionado
-                    object.hasCollided = true;  // Marca como colisionada
+                if (!object.hasCollided) {  
+                    object.hasCollided = true;  
         
-                    // Iniciar animación de explosión y actualizar puntaje
                     object.play('explode');
-                    this.player1Score -= 10;  // Jugador 1 pierde puntos
+                    this.player1Score -= 10;  
                     this.player1ScoreText.setText(getPhrase(`Jugador 1: ${this.player1Score}`));
         
-                    // Esperar a que termine la animación antes de destruir la bomba
                     object.on('animationcomplete', () => {
                         object.destroy();
                     });
                 }
             });
         
-            // Detectar colisión entre la bomba y el jugador 2
             this.physics.add.overlap(object, this.player2, () => {
-                if (!object.hasCollided) {  // Verifica si ya ha colisionado
-                    object.hasCollided = true;  // Marca como colisionada
+                if (!object.hasCollided) {  
+                    object.hasCollided = true;
         
-                    // Iniciar animación de explosión y actualizar puntaje
                     object.play('explode');
-                    this.player2Score -= 10;  // Jugador 2 pierde puntos
+                    this.player2Score -= 10;  
                     this.player2ScoreText.setText(getPhrase(`Jugador 2: ${this.player2Score}`));
         
-                    // Esperar a que termine la animación antes de destruir la bomba
                     object.on('animationcomplete', () => {
                         object.destroy();
                     });
@@ -279,14 +304,5 @@ export class Vs extends Scene {
             });
 
         this.physics.add.collider(object, this.ground, callback, null, this);
-    }
-    
-    collectObject(player, object) {
-        if (object.isHarmful) {
-            player.setTint(0xff0000);
-            this.time.delayedCall(500, () => player.clearTint()); 
-        } else {
-            object.destroy(); 
-        }
     }
 }

@@ -21,6 +21,7 @@ export class Coop extends Scene {
         this.initialJawaSpeed = 100; 
         this.spawnMultiplier = 0.95; 
         this.speedIncrement = 20;
+        this.baseTexture = "gun";
     }
     
     init(data) {
@@ -34,10 +35,16 @@ export class Coop extends Scene {
     }
 
     create() {
-        this.anims.remove('walk');
-        this.anims.remove('idle');
-        this.anims.remove('jump');
-        this.anims.remove('action');
+        this.anims.remove('walk-1');
+        this.anims.remove('idle-1');
+        this.anims.remove('jump-1');
+        this.anims.remove('action-1');
+
+        this.anims.remove('walk-2');
+        this.anims.remove('idle-2');
+        this.anims.remove('jump-2');
+        this.anims.remove('action-2');
+
         this.player1CanAttack = true;  
         this.player2CanAttack = true;  
 
@@ -77,38 +84,68 @@ export class Coop extends Scene {
         this.player1 = this.physics.add.sprite(480, 1000, this.player1texture).setScale(0.7);
         this.player1.setCollideWorldBounds(true);
         this.player1.setGravityY(300);
+        this.player1.number = "1";
 
         this.player2 = this.physics.add.sprite(1440, 1000, this.player2texture).setScale(0.7);
         this.player2.setCollideWorldBounds(true);
         this.player2.setGravityY(300);
+        this.player2.number = "2";
 
         this.physics.add.collider(this.player1, this.ground);
         this.physics.add.collider(this.player2, this.ground);        
 
         this.anims.create({
-            key: 'walk',
-            frames: this.anims.generateFrameNumbers('playergun', { start: 0, end: 7 }),
+            key: 'walk-1',
+            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 0, end: 7 }),
             frameRate: 20,
             repeat: 0
         });
 
         this.anims.create({
-            key: 'idle',
-            frames: this.anims.generateFrameNumbers('playergun', { start: 8, end: 13 }),
+            key: 'idle-1',
+            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 8, end: 13 }),
             frameRate: 12,
             repeat: 0
         });
 
         this.anims.create({
-            key: 'jump',
-            frames: this.anims.generateFrameNumbers('playergun', { start: 14, end: 17 }),
+            key: 'jump-1',
+            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 14, end: 17 }),
             frameRate: 4, 
             repeat: 0  
         });
 
         this.anims.create({
-            key: 'action',
-            frames: this.anims.generateFrameNumbers('playergun', { start: 18, end: 30 }),
+            key: 'action-1',
+            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 18, end: 30 }),
+            frameRate: 15, 
+            repeat: 0  
+        });
+
+        this.anims.create({
+            key: 'walk-2',
+            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 0, end: 7 }),
+            frameRate: 20,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'idle-2',
+            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 8, end: 13 }),
+            frameRate: 12,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'jump-2',
+            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 14, end: 17 }),
+            frameRate: 4, 
+            repeat: 0  
+        });
+
+        this.anims.create({
+            key: 'action-2',
+            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 18, end: 30 }),
             frameRate: 15, 
             repeat: 0  
         });
@@ -180,7 +217,7 @@ export class Coop extends Scene {
 
     update() {
         this.jawaGroup.children.iterate(jawa => {
-            jawa.followPlayer(this.player1, this.player2);
+            jawa.followPlayer(this.player1, this.player2, this.jawaSpeed);
         });
     }
     
@@ -190,27 +227,27 @@ export class Coop extends Scene {
 
         if (direction === 'left') {
             player.setVelocityX(-speed);
-            player.anims.play('walk', true);
+            player.anims.play(`walk-${player.number}`, true);
             player.flipX = true;
         } else if (direction === 'right') {
             player.setVelocityX(speed);
-            player.anims.play('walk', true);
+            player.anims.play(`walk-${player.number}`, true);
             player.flipX = false;
         } else if (direction === 'up' && player.body.onFloor()) {
             player.setVelocityY(jumpVelocity);
-            player.anims.play('jump', true);
+            player.anims.play(`jump-${player.number}`, true);
         } else if (direction === 'down') {
             player.setVelocityY(speed);
         } else if (direction === 'action') {
             player.setVelocityX(0);
-            player.anims.play('action', true);
+            player.anims.play(`action-${player.number}`, true);
         }
     }
 
     stopPlayer(player) {
         player.setVelocityX(0);
         player.on('animationcomplete', () => {
-            player.anims.play('idle', true);
+            player.anims.play(`idle-${player.number}`, true);
         });
     }
 
@@ -260,23 +297,23 @@ export class Coop extends Scene {
 
     spawnJawaWave() {
         const numJawas = Phaser.Math.Between(3, 6);
-    
+        console.log("creaciob de enemigos")
+        console.log("velocidad: " + this.jawaSpeed)
+
         for (let i = 0; i < numJawas; i++) {
             const x = Phaser.Math.Between(100, 1800);
             const jawaTexture = Phaser.Math.Between(0, 1) === 0 ? 'jawaA' : 'jawaV';
             const jawa = new Jawa(this, x, 0, jawaTexture);
     
-            jawa.setVelocityX(this.jawaSpeed);  // Establece la velocidad de los Jawas
-            this.jawaGroup.add(jawa);           // Añade los Jawas al grupo
+            jawa.setVelocityY(this.jawaSpeed);  
+            this.jawaGroup.add(jawa);           
         }
+        
+        this.jawaSpeed += this.speedIncrement;  
+        this.spawnDelay = Math.max(this.spawnDelay * this.spawnMultiplier, 2000);  
     
-        this.jawaSpeed += this.speedIncrement;  // Incrementa la velocidad de los Jawas
-        this.spawnDelay = Math.max(this.spawnDelay * this.spawnMultiplier, 2000);  // Reduce el tiempo de spawn
-    
-        // Asegúrate de que los Jawas colisionen con el suelo/plataformas
         this.physics.add.collider(this.jawaGroup, this.ground);
     
-        // Actualiza el evento de generación de Jawas
         this.time.removeAllEvents();
         this.time.addEvent({
             delay: this.spawnDelay,
@@ -285,8 +322,6 @@ export class Coop extends Scene {
             loop: true
         });
     }
-    
-
 
     findClosestJawa(player, jawaGroup) {
         let closestJawa = null;
@@ -308,13 +343,9 @@ export class Coop extends Scene {
     shootBullet(player, playerCanAttack) {
         const bulletSpeed = 300;
     
-        if (!playerCanAttack) return; 
+        if (!playerCanAttack) return;
     
-        if (this.jawaGroup.countActive(true) === 0) {
-            return;
-        }
-    
-        player.anims.play('action', true);
+        player.anims.play(`action-${player.number}`, true);
     
         const bullet = new Bullet(this, player.x, player.y);
     
@@ -327,39 +358,34 @@ export class Coop extends Scene {
             }
         });
     
-        const targetJawa = this.findClosestJawa(player, this.jawaGroup);
+        bullet.body.setVelocity(0, -bulletSpeed); 
     
-        if (targetJawa) {
-            const angle = Phaser.Math.Angle.Between(bullet.x, bullet.y, targetJawa.x, targetJawa.y);
-            bullet.body.setVelocity(Math.cos(angle) * bulletSpeed, Math.sin(angle) * bulletSpeed);
+        this.physics.add.collider(bullet, this.jawaGroup, (bullet, jawa) => {
+            jawa.destroy();
+            bullet.destroy(); 
     
-            this.physics.add.collider(bullet, targetJawa, (bullet, jawa) => {
-                jawa.destroy();
-                bullet.destroy();
-
-                const sharedScore = Phaser.Math.Between(5, 20);
-
-                this.sharedScore += sharedScore;  
-                this.scoreText.setText(getPhrase('Puntaje : ') + this.sharedScore);  
-            });
-        }
+            const sharedScore = Phaser.Math.Between(5, 20);
+            this.sharedScore += sharedScore;
+            this.jawasKilled++;
+            this.scoreText.setText(getPhrase('Puntaje : ') + this.sharedScore);
+        });
     
         this.physics.add.collider(bullet, this.ground, () => {
             bullet.destroy();
         });
     
         playerCanAttack = false;
-
+    
         this.time.delayedCall(500, () => {
-            playerCanAttack = true;  
+            playerCanAttack = true;
         });
-    }  
+    }
+        
 
     jawaCollision(player, jawa) {
         jawa.destroy();
 
         this.sharedLives--;
-        this.jawasKilled++;
 
         this.livesText.setText(`Vidas: ${this.sharedLives}`);
 
