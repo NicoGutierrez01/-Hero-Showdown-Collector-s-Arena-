@@ -97,6 +97,11 @@ export class Preloader extends Scene
         //platforms
         this.load.image('platform', 'platform.png');
         this.load.image('negro','negro.png');
+
+        //items
+        this.load.image('points', 'ItemPoints.png');
+        this.load.image('life', 'ItemLife.png');
+        this.load.image('velocity', 'ItemVelocity.png');
         
         this.load.image('triangle', 'triangle.png');
 

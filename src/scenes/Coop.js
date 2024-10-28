@@ -4,6 +4,7 @@ import { inputConfigs } from '../utils/inputConfigs';
 import { Bomb } from '../Objects/Bomb';
 import { Jawa } from '../Objects/Jawas';
 import { Bullet } from '../Objects/Bullet';
+import { Life } from '../Objects/Life';
 import { getPhrase } from '../service/translations';
 
 
@@ -84,68 +85,38 @@ export class Coop extends Scene {
         this.player1 = this.physics.add.sprite(480, 1000, this.player1texture).setScale(0.7);
         this.player1.setCollideWorldBounds(true);
         this.player1.setGravityY(300);
-        this.player1.number = "1";
 
         this.player2 = this.physics.add.sprite(1440, 1000, this.player2texture).setScale(0.7);
         this.player2.setCollideWorldBounds(true);
         this.player2.setGravityY(300);
-        this.player2.number = "2";
 
         this.physics.add.collider(this.player1, this.ground);
         this.physics.add.collider(this.player2, this.ground);        
 
         this.anims.create({
-            key: 'walk-1',
-            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 0, end: 7 }),
+            key: 'walk',
+            frames: this.anims.generateFrameNumbers(`playergun`, { start: 0, end: 7 }),
             frameRate: 20,
             repeat: 0
         });
 
         this.anims.create({
-            key: 'idle-1',
-            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 8, end: 13 }),
+            key: 'idle',
+            frames: this.anims.generateFrameNumbers(`playergun`, { start: 8, end: 13 }),
             frameRate: 12,
             repeat: 0
         });
 
         this.anims.create({
-            key: 'jump-1',
-            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 14, end: 17 }),
+            key: 'jump',
+            frames: this.anims.generateFrameNumbers(`playergun`, { start: 14, end: 17 }),
             frameRate: 4, 
             repeat: 0  
         });
 
         this.anims.create({
-            key: 'action-1',
-            frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 18, end: 30 }),
-            frameRate: 15, 
-            repeat: 0  
-        });
-
-        this.anims.create({
-            key: 'walk-2',
-            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 0, end: 7 }),
-            frameRate: 20,
-            repeat: 0
-        });
-
-        this.anims.create({
-            key: 'idle-2',
-            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 8, end: 13 }),
-            frameRate: 12,
-            repeat: 0
-        });
-
-        this.anims.create({
-            key: 'jump-2',
-            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 14, end: 17 }),
-            frameRate: 4, 
-            repeat: 0  
-        });
-
-        this.anims.create({
-            key: 'action-2',
-            frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 18, end: 30 }),
+            key: 'action',
+            frames: this.anims.generateFrameNumbers(`playergun`, { start: 18, end: 30 }),
             frameRate: 15, 
             repeat: 0  
         });
@@ -201,7 +172,6 @@ export class Coop extends Scene {
 
         this.physics.world.setBoundsCollision(true, true, true, true);
 
-
         this.time.addEvent({
             delay: this.spawnDelay,
             callback: this.spawnJawaWave,
@@ -227,39 +197,42 @@ export class Coop extends Scene {
 
         if (direction === 'left') {
             player.setVelocityX(-speed);
-            player.anims.play(`walk-${player.number}`, true);
+            player.anims.play(`walk`, true);
             player.flipX = true;
         } else if (direction === 'right') {
             player.setVelocityX(speed);
-            player.anims.play(`walk-${player.number}`, true);
+            player.anims.play(`walk`, true);
             player.flipX = false;
         } else if (direction === 'up' && player.body.onFloor()) {
             player.setVelocityY(jumpVelocity);
-            player.anims.play(`jump-${player.number}`, true);
+            player.anims.play(`jump`, true);
         } else if (direction === 'down') {
             player.setVelocityY(speed);
         } else if (direction === 'action') {
             player.setVelocityX(0);
-            player.anims.play(`action-${player.number}`, true);
+            player.anims.play(`action`, true);
         }
     }
 
     stopPlayer(player) {
         player.setVelocityX(0);
         player.on('animationcomplete', () => {
-            player.anims.play(`idle-${player.number}`, true);
+            player.anims.play(`idle`, true);
         });
     }
 
     spawnFallingObject() {
         const xPosition = Phaser.Math.Between(50, 974); 
+        const yPosition = Phaser.Math.Between(50, 1030);
 
-        let element = Phaser.Math.Between(1, 1);
+        let element = Phaser.Math.Between(1, 2);
         let object;
 
         if (element === 1) {
             object = new Bomb(this, xPosition, 0).setScale(0.4);
-        
+            console.log("Bomba creada en posición:", xPosition, 0);
+            this.fallingObjects.add(object);
+
             object.hasCollided = false;
             
             this.physics.add.overlap(object, this.player1, () => {
@@ -279,6 +252,29 @@ export class Coop extends Scene {
                     object.on('animationcomplete', () => {
                         object.destroy();
                     });
+                }
+            });
+        }
+
+        if (element === 2 ) {
+            object = new Life(this, xPosition, yPosition).setScale(0.5);
+            console.log("Vida creada en posición:", xPosition, yPosition);
+            this.fallingObjects.add(object);
+
+            object.hasCollided = false;
+
+            this.physics.add.overlap(object, this.player1, () => {
+                if (!object.hasCollided) {
+                    object.hasCollided = true;
+                    this.sharedLives++;
+                    object.destroy();
+                }
+            });
+            this.physics.add.overlap(object, this.player2, () => {
+                if (!object.hasCollided) {
+                    object.hasCollided = true;
+                    this.sharedLives++;
+                    object.destroy();
                 }
             });
         }
@@ -345,7 +341,7 @@ export class Coop extends Scene {
     
         if (!playerCanAttack) return;
     
-        player.anims.play(`action-${player.number}`, true);
+        player.anims.play(`action`, true);
     
         const bullet = new Bullet(this, player.x, player.y);
     
