@@ -172,11 +172,10 @@ export class Coop extends Scene {
 
         this.physics.world.setBoundsCollision(true, true, true, true);
 
-        this.time.addEvent({
+        this.eventspawnJawaWave = this.time.addEvent({
             delay: this.spawnDelay,
             callback: this.spawnJawaWave,
-            callbackScope: this,
-            loop: true
+            callbackScope: this
         });
 
         this.physics.add.collider(this.spawnJawaWave, this.ground);
@@ -224,64 +223,78 @@ export class Coop extends Scene {
     spawnFallingObject() {
         const xPosition = Phaser.Math.Between(50, 974); 
         const yPosition = Phaser.Math.Between(50, 1030);
-
-        let element = Phaser.Math.Between(1, 2);
         let object;
+        const objectType = Phaser.Math.Between(1, 2); 
+        
+        console.log(objectType)
+        console.log(this)
 
-        if (element === 1) {
+        if (objectType === 1) {
             object = new Bomb(this, xPosition, 0).setScale(0.4);
-            console.log("Bomba creada en posición:", xPosition, 0);
-            this.fallingObjects.add(object);
-
             object.hasCollided = false;
+
+            const randombob = Phaser.Math.Between(10, 50);
             
             this.physics.add.overlap(object, this.player1, () => {
                 if (!object.hasCollided) {
                     object.hasCollided = true;
-                    object.play('explode');      
+    
+                    object.play('explode');
+                    this.sharedScore -= randombob;
+                    this.scoreText.setText(getPhrase(`Puntaje: ${this.sharedScore}`));
+    
                     object.on('animationcomplete', () => {
                         object.destroy();
                     });
                 }
             });
-
+    
             this.physics.add.overlap(object, this.player2, () => {
                 if (!object.hasCollided) {
                     object.hasCollided = true;
-                    object.play('explode');  
+    
+                    object.play('explode');
+                    this.sharedScore -= randombob;
+                    this.scoreText.setText(getPhrase(`Puntaje: ${this.sharedScore}`));
+    
                     object.on('animationcomplete', () => {
                         object.destroy();
                     });
                 }
             });
-        }
-
-        if (element === 2 ) {
-            object = new Life(this, xPosition, yPosition).setScale(0.5);
-            console.log("Vida creada en posición:", xPosition, yPosition);
-            this.fallingObjects.add(object);
-
+        } 
+        
+        if (objectType === 2) {
+            object = new Life(this, xPosition, yPosition).setScale(0.4);
             object.hasCollided = false;
-
+            
+            const randomPoints = Phaser.Math.Between(20, 60);
+    
             this.physics.add.overlap(object, this.player1, () => {
                 if (!object.hasCollided) {
                     object.hasCollided = true;
-                    this.sharedLives++;
+    
+                    if (this.sharedLives < 3) {
+                        this.sharedLives ++;
+                        this.livesText.setText(getPhrase(`Vidas: ${this.sharedLives}`));
+                    }
                     object.destroy();
                 }
             });
+    
             this.physics.add.overlap(object, this.player2, () => {
                 if (!object.hasCollided) {
                     object.hasCollided = true;
-                    this.sharedLives++;
+    
+                    this.sharedLives ++;
+                    this.livesText.setText(getPhrase(`Vidas: ${this.sharedLives}`));
+    
                     object.destroy();
                 }
             });
         }
-
         this.physics.add.collider(object, this.ground);
     }
-    
     collectObject(player, object) {
         if (object.isHarmful) {
             player.setTint(0xff0000);
@@ -310,12 +323,15 @@ export class Coop extends Scene {
     
         this.physics.add.collider(this.jawaGroup, this.ground);
     
-        this.time.removeAllEvents();
-        this.time.addEvent({
+        if (this.eventspawnJawaWave) {
+            this.eventspawnJawaWave.destroy();
+            this.eventspawnJawaWave = null;
+        }
+
+        this.eventspawnJawaWave = this.time.addEvent({
             delay: this.spawnDelay,
             callback: this.spawnJawaWave,
-            callbackScope: this,
-            loop: true
+            callbackScope: this
         });
     }
 

@@ -66,13 +66,17 @@ export class Preloader extends Scene
         });
 
         this.load.spritesheet('pezspade', 'pezspade.png', {
-            frameWidth: 207, 
-            frameHeight: 256
+            frameWidth: 190, 
+            frameHeight: 206
         });
 
         this.load.spritesheet('shellyspade', 'shellyspade.png', {
             frameWidth: 184, 
             frameHeight: 235
+        });
+        this.load.spritesheet('jetpackspade', 'jetpackspade.png', {
+            frameWidth: 190, 
+            frameHeight: 206
         });
         
         //objects

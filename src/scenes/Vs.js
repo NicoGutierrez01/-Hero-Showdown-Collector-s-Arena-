@@ -218,7 +218,7 @@ export class Vs extends Scene {
     movePlayer(player, direction) {
         const baseSpeed = 400;
         const speed = player.speed || baseSpeed;;
-        const jumpVelocity = -500;
+        const jumpVelocity = -450;
 
         if (direction === 'left') {
             player.setVelocityX(-speed);
@@ -250,16 +250,16 @@ export class Vs extends Scene {
     attackPlayer(attacker, defender, attackerCanAttackFlag) {
         const distance = Phaser.Math.Distance.Between(attacker.x, attacker.y, defender.x, defender.y);
     
-        attacker.anims.play(`action-${player.number}`); 
-        if (distance < 100 && attackerCanAttackFlag) {  
+        attacker.anims.play(`action-${attacker.number}`); 
+        if (distance < 250 && attackerCanAttackFlag) {  
 
     
             const damage = Phaser.Math.Between(5, 15); 
-            if (attacker === this.player1 && this.player1CanAttack) {
+            if (attacker.number === this.player1.number && this.player1CanAttack) {
                 this.player1Score += damage;
                 this.player1ScoreText.setText(getPhrase(`Jugador 1: ${this.player1Score}`));
                 this.player1CanAttack = false;  
-            } else if (attacker === this.player2 && this.player2CanAttack) {
+            } else if (attacker.number === this.player2.number && this.player2CanAttack) {
                 this.player2Score += damage;
                 this.player2ScoreText.setText(getPhrase(`Jugador 2: ${this.player2Score}`));
                 this.player2CanAttack = false;  

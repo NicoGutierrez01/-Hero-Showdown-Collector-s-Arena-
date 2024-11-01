@@ -1,6 +1,6 @@
 export class Bomb extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
-
+        
         super(scene, x, y, 'bomb');  
 
         scene.add.existing(this);
