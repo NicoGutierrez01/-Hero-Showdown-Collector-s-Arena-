@@ -81,28 +81,24 @@ export class Vs extends Scene {
             frameRate: 4, 
             repeat: 0  
         });
-
         this.anims.create({
             key: 'action-1',
             frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 18, end: 30 }),
             frameRate: 15, 
             repeat: 0  
         });
-
         this.anims.create({
             key: 'walk-2',
             frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 0, end: 7 }),
             frameRate: 20,
             repeat: 0
         });
-
         this.anims.create({
             key: 'idle-2',
             frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 8, end: 13 }),
             frameRate: 12,
             repeat: 0
         });
-
         this.anims.create({
             key: 'jump-2',
             frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 14, end: 17 }),
@@ -116,8 +112,6 @@ export class Vs extends Scene {
             frameRate: 15, 
             repeat: 0  
         });
-
-
         const config = {
             key: 'explode',
             frames: this.anims.generateFrameNumbers('bomb', { start: 0, end: 11 }),
@@ -233,8 +227,8 @@ export class Vs extends Scene {
             player.anims.play(`jump-${player.number}`, true);
         } else if (direction === 'down') {
             player.setVelocityY(speed);
-        } else if (direction === 'action') {
-            player.setVelocityX(0);
+        } 
+        if (direction === 'action') {
             player.anims.play(`action-${player.number}`, true);
         }
     }
@@ -253,7 +247,6 @@ export class Vs extends Scene {
         attacker.anims.play(`action-${attacker.number}`); 
         if (distance < 250 && attackerCanAttackFlag) {  
 
-    
             const damage = Phaser.Math.Between(5, 15); 
             if (attacker.number === this.player1.number && this.player1CanAttack) {
                 this.player1Score += damage;
@@ -264,7 +257,6 @@ export class Vs extends Scene {
                 this.player2ScoreText.setText(getPhrase(`Jugador 2: ${this.player2Score}`));
                 this.player2CanAttack = false;  
             }
-    
             defender.setTint(0xff0000); 
             this.time.delayedCall(500, () => defender.clearTint()); 
         }

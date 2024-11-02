@@ -69,7 +69,10 @@ export class Preloader extends Scene
             frameWidth: 190, 
             frameHeight: 206
         });
-
+        this.load.spritesheet('pezgun', 'pezgun.png', {
+            frameWidth: 190, 
+            frameHeight: 206
+        });
         this.load.spritesheet('shellyspade', 'shellyspade.png', {
             frameWidth: 184, 
             frameHeight: 235
@@ -78,6 +81,11 @@ export class Preloader extends Scene
             frameWidth: 190, 
             frameHeight: 206
         });
+        this.load.spritesheet('jetpackgun', 'jetpackgun.png', {
+            frameWidth: 190, 
+            frameHeight: 206
+        });
+
         
         //objects
         this.load.spritesheet('bomb', 'bomb.png', {

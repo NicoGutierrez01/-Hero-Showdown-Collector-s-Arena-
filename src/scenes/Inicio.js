@@ -10,7 +10,7 @@ export class Inicio extends Scene
     create ()
     {
         const intro = this.add.video(0, 0, 'intro')
-            .setScale(2.8);
+            .setScale(0.5);
 
         Phaser.Display.Align.In.Center(intro, this.add.zone(960, 540, 1024, 768));
 
