@@ -14,19 +14,6 @@ export class Preloader extends Scene
     {
         this.load.setPath('assets');
 
-        this.load.spritesheet('player', 'animPJ.png', {
-            frameWidth: 207, 
-            frameHeight: 221 
-        });
-        this.load.spritesheet('playergun', 'animgun.png', {
-            frameWidth: 207,
-            frameHeight: 221
-        })
-        this.load.spritesheet('playerspade', 'animspade.png', {
-            frameWidth: 207,
-            frameHeight: 221
-        })
-
         //fondos
         this.load.image('fondovs', 'fondovs.png');
         this.load.image('fondomenu', 'fondomenu.png'); 
@@ -64,7 +51,6 @@ export class Preloader extends Scene
             frameWidth: 201, 
             frameHeight: 309
         });
-
         this.load.spritesheet('pezspade', 'pezspade.png', {
             frameWidth: 190, 
             frameHeight: 206
@@ -86,7 +72,6 @@ export class Preloader extends Scene
             frameHeight: 206
         });
 
-        
         //objects
         this.load.spritesheet('bomb', 'bomb.png', {
             frameWidth: 292, 
@@ -121,6 +106,13 @@ export class Preloader extends Scene
 
         //video intro
         this.load.video('intro', 'intro.mp4');
+
+        this.load.setPath('audio');
+
+        //audio
+        this.load.audio('TrackMenu', 'TrackMenu.mp3');
+        this.load.audio('TrackGame', 'TrackGame.mp3');
+        this.load.audio('TrackConfig', 'TrackConfig.flac');
     }
 
     create ()

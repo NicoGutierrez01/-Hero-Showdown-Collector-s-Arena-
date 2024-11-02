@@ -8,6 +8,17 @@ export class MainMenu extends Scene
         super('MainMenu');
     }
 
+    init(){
+        const savedVolume = localStorage.getItem('gameVolume') ? parseInt(localStorage.getItem('gameVolume'), 10) : 100;
+
+        if (!this.TrackMenu || !this.TrackMenu.isPlaying) {
+            this.TrackMenu = this.sound.add('TrackMenu', { volume: savedVolume / 100 });
+            this.TrackMenu.play();
+        } else if (this.TrackMenu.isPaused) {
+            this.TrackMenu.resume();
+        }
+    }
+
     create ()
     {
         this.add.image(960, 540, 'fondomenu');
@@ -41,10 +52,12 @@ export class MainMenu extends Scene
 
 
         buttonPlay.on('pointerdown', () => {
-            this.scene.start('Mode');
+            this.TrackMenu.pause();
+            this.scene.start('Controls');
         });
 
         buttonConfig.on('pointerdown', () => {
+            this.TrackMenu.pause();
             this.scene.start('Config');
         });
 
@@ -56,6 +69,7 @@ export class MainMenu extends Scene
     update(){
         if (this.r.isDown) {
             this.scene.start('Inicio');
+            this.TrackMenu.pause();
           }
     }
 }

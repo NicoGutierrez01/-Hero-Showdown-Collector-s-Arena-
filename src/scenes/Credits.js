@@ -10,6 +10,8 @@ export class Credits extends Scene
 
     create ()
     {
+        this.add.image(960, 540, 'fondomenu');
+        
         this.add.text(960, 540, 'GAGLE games', {
             fontFamily: 'Arial Black', fontSize: 80, color: '#ffffff',
             stroke: '#000000', strokeThickness: 3,

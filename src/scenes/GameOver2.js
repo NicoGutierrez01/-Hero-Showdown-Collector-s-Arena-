@@ -14,12 +14,12 @@ export class GameOver2 extends Scene {
     create() {
         this.add.image(960, 540, 'fondomenu');
 
-        this.add.text(960, 400, `Puntaje: ${this.sharedScore}`, {
+        this.add.text(960, 400, getPhrase(`Puntaje: ${this.sharedScore}`), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff', 
             stroke: '#000000', strokeThickness: 8, align: 'center'
         }).setOrigin(0.5);
 
-        this.add.text(960, 600, `Jawas Eliminados: ${this.jawasKilled}`, {
+        this.add.text(960, 600, getPhrase(`Jawas Eliminados: ${this.jawasKilled}`), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff', 
             stroke: '#000000', strokeThickness: 8, align: 'center'
         }).setOrigin(0.5);

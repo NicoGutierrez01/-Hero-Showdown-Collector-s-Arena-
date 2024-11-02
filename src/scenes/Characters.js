@@ -104,7 +104,7 @@ export class Characters extends Scene {
 
         this.startMessage.on('pointerdown', () => {
             console.log(`Going to scene: ${this.selectedMode}`);
-            console.table(this.selectedCharacter1.characterTexture)
+            console.table(this.selectedCharacter1.characterTexture);
             this.scene.start(this.selectedMode,{player1:this.selectedCharacter1.characterTexture,player2:this.selectedCharacter2.characterTexture});
         });
     }

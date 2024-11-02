@@ -17,8 +17,15 @@ export class Vs extends Scene {
     }
     
     init(data){
+        const savedVolume = localStorage.getItem('gameVolume') ? parseInt(localStorage.getItem('gameVolume'), 10) : 100;
         this.player1texture = data.player1;
         this.player2texture = data.player2;
+        if (!this.TrackGame || !this.TrackGame.isPlaying) {
+            this.TrackGame = this.sound.add('TrackGame', { volume: savedVolume / 100 });
+            this.TrackGame.play();
+        } else if (this.TrackGame.isPaused) {
+            this.TrackGame.resume();
+        }
     }
 
     create() {
@@ -184,6 +191,7 @@ export class Vs extends Scene {
         });
 
         this.time.delayedCall(this.gameDuration, () => {
+            this.TrackGame.pause();
             this.scene.start('GameOver', {
                 player1Score: this.player1Score,
                 player2Score: this.player2Score

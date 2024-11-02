@@ -1,23 +1,44 @@
 import { Scene } from 'phaser';
 import { getTranslations, getPhrase } from '../service/translations';
-const ES_AR= 'es-AR';
-const EN_US= 'en-US';
-const PT_BR= 'pt-BR';
-const DE_DE= 'de-DE';
 
-export class Config extends Scene
-{
+const ES_AR = 'es-AR';
+const EN_US = 'en-US';
+const PT_BR = 'pt-BR';
 
+export class Config extends Scene {
     #wasChangedLanguage = 'NOT_FETCHED';
 
-    constructor ()
-    {
+    constructor() {
         super('Config');
     }
 
-    create ()
-    {
-        let volume = 50;
+    init() {
+        this.volume = localStorage.getItem('gameVolume') ? parseInt(localStorage.getItem('gameVolume'), 10) : 100;
+
+        if (!this.TrackConfig || !this.TrackConfig.isPlaying) {
+            this.TrackConfig = this.sound.add('TrackConfig');
+            this.TrackConfig.play();
+        } else if (this.TrackConfig.isPaused) {
+            this.TrackConfig.resume();
+        }
+
+        this.TrackMenu = this.scene.get('MainMenu').TrackMenu;
+        this.TrackGame = this.scene.get('Vs').TrackGame;
+        this.TrackGame = this.scene.get('Coop').TrackGame;
+
+        this.setGlobalVolume(this.volume);
+    }
+
+    setGlobalVolume(volume) {
+        if (this.TrackConfig) this.TrackConfig.setVolume(volume / 100);
+        if (this.TrackMenu) this.TrackMenu.setVolume(volume / 100);
+        if (this.TrackGame) this.TrackGame.setVolume(volume / 100);
+    }
+
+    create() {
+        this.add.image(960, 540, 'fondomenu');
+
+        let volume = this.volume;
 
         this.obtenerTraducciones(ES_AR);
 
@@ -28,9 +49,9 @@ export class Config extends Scene
         }).setOrigin(0.5);
 
         const flags = [
-            {lang: ES_AR, img: this.add.image(960, 370, 'Argentina').setScale(0.5)},
-            {lang: EN_US, img: this.add.image(960, 370, 'EEUU').setScale(0.1).setVisible(false)},
-            {lang: PT_BR, img: this.add.image(960, 370, 'Brasil').setScale(0.3).setVisible(false)}
+            { lang: ES_AR, img: this.add.image(960, 370, 'Argentina').setScale(0.5) },
+            { lang: EN_US, img: this.add.image(960, 370, 'EEUU').setScale(0.1).setVisible(false) },
+            { lang: PT_BR, img: this.add.image(960, 370, 'Brasil').setScale(0.3).setVisible(false) }
         ];
         let currentFlagIndex = 0;
 
@@ -40,8 +61,8 @@ export class Config extends Scene
             align: 'center'
         }).setOrigin(0.5);
 
-        const volumeBarBg = this.add.rectangle(960, 640, 150, 20, 0x888888); 
-        const volumeBar = this.add.rectangle(885, 640, 75, 20, 0xffffff).setOrigin(0, 0.5); 
+        const volumeBarBg = this.add.rectangle(960, 640, 150, 20, 0x888888);
+        const volumeBar = this.add.rectangle(885, 640, (volume / 100) * 150, 20, 0xffffff).setOrigin(0, 0.5);
 
         this.pantalla = this.add.text(960, 810, getPhrase('Pantalla'), {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
@@ -78,7 +99,6 @@ export class Config extends Scene
             currentFlagIndex = (currentFlagIndex + 1) % flags.length;
             flags[currentFlagIndex].img.setVisible(true);
             this.obtenerTraducciones(flags[currentFlagIndex].lang);
-
         });
 
         buttonLeft.on('pointerdown', () => {
@@ -92,7 +112,9 @@ export class Config extends Scene
         buttonLeft2.setInteractive({ cursor: 'pointer' });
 
         const updateVolumeBar = () => {
-            volumeBar.width = (volume / 100) * 150; 
+            volumeBar.width = (volume / 100) * 150;
+            this.setGlobalVolume(volume); 
+            localStorage.setItem('gameVolume', volume);
         };
 
         buttonRight2.on('pointerdown', () => {
@@ -135,9 +157,9 @@ export class Config extends Scene
         this.buttonBack.setInteractive({ cursor: 'pointer' });
 
         this.buttonBack.on('pointerdown', () => {
+            this.TrackConfig.pause();
             this.scene.start('MainMenu');
         });
-
     }
 
     update() {
@@ -159,7 +181,6 @@ export class Config extends Scene
     async obtenerTraducciones(language) {
         this.language = language;
         this.#wasChangedLanguage = 'FETCHING';
-
         await getTranslations(language, this.updateWasChangedLanguage);
     }
 }

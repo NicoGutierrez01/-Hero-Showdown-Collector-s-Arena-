@@ -26,6 +26,7 @@ export class Coop extends Scene {
     }
     
     init(data) {
+        const savedVolume = localStorage.getItem('gameVolume') ? parseInt(localStorage.getItem('gameVolume'), 10) : 100;
         this.player1texture = data.player1;
         this.player2texture = data.player2;
         this.spawnDelay = this.initialSpawnDelay; 
@@ -37,6 +38,12 @@ export class Coop extends Scene {
         this.reloadTime = 2000;    
         this.player1Bullets = this.maxBullets;
         this.player2Bullets = this.maxBullets;
+        if (!this.TrackGame || !this.TrackGame.isPlaying) {
+            this.TrackGame = this.sound.add('TrackGame', { volume: savedVolume / 100 });
+            this.TrackGame.play();
+        } else if (this.TrackGame.isPaused) {
+            this.TrackGame.resume();
+        }
     }
 
     create() {
@@ -58,11 +65,11 @@ export class Coop extends Scene {
         this.add.image(960, 540, 'fondocoop');
         this.devil = this.add.image(512, 100, 'devil').setScale(0.36);
 
-        this.scoreText = this.add.text(1780, 50, getPhrase('Puntaje : '),{
+        this.scoreText = this.add.text(1780, 50, getPhrase('Puntaje: '),{
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
-        this.livesText = this.add.text(100, 50, `Vidas: ${this.sharedLives}`, {
+        this.livesText = this.add.text(100, 50, getPhrase(`Vidas: ${this.sharedLives}`), {
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
@@ -474,11 +481,12 @@ export class Coop extends Scene {
 
         this.sharedLives--;
 
-        this.livesText.setText(`Vidas: ${this.sharedLives}`);
+        this.livesText.setText(getPhrase(`Vidas: ${this.sharedLives}`));
 
         console.log(`sharedLives: ${this.sharedLives}, sharedScore: ${this.sharedScore}, jawasKilled: ${this.jawasKilled}`);
 
         if (this.sharedLives <= 0) {
+            this.TrackGame.pause();
             this.scene.start('GameOver2', { 
                 sharedScore: this.sharedScore, 
                 jawasKilled: this.jawasKilled 
