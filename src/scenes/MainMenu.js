@@ -12,7 +12,7 @@ export class MainMenu extends Scene
         const savedVolume = localStorage.getItem('gameVolume') ? parseInt(localStorage.getItem('gameVolume'), 10) : 100;
 
         if (!this.TrackMenu || !this.TrackMenu.isPlaying) {
-            this.TrackMenu = this.sound.add('TrackMenu', { volume: savedVolume / 100 });
+            this.TrackMenu = this.sound.add('TrackMenu', { volume: savedVolume / 100, loop: true });
             this.TrackMenu.play();
         } else if (this.TrackMenu.isPaused) {
             this.TrackMenu.resume();

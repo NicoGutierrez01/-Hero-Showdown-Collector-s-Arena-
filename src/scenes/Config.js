@@ -16,11 +16,11 @@ export class Config extends Scene {
         this.volume = localStorage.getItem('gameVolume') ? parseInt(localStorage.getItem('gameVolume'), 10) : 100;
 
         if (!this.TrackConfig || !this.TrackConfig.isPlaying) {
-            this.TrackConfig = this.sound.add('TrackConfig');
+            this.TrackConfig = this.sound.add('TrackConfig', { volume: this.volume / 100, loop: true });
             this.TrackConfig.play();
         } else if (this.TrackConfig.isPaused) {
             this.TrackConfig.resume();
-        }
+        }        
 
         this.TrackMenu = this.scene.get('MainMenu').TrackMenu;
         this.TrackGame = this.scene.get('Vs').TrackGame;

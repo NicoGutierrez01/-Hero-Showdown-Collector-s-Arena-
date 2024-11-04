@@ -47,10 +47,6 @@ export class Preloader extends Scene
         this.load.image('blito', 'blito.png');
 
         //characters sprites 
-        this.load.spritesheet('hierrospade', 'hierrospade.png', {
-            frameWidth: 201, 
-            frameHeight: 309
-        });
         this.load.spritesheet('pezspade', 'pezspade.png', {
             frameWidth: 190, 
             frameHeight: 206
@@ -60,8 +56,12 @@ export class Preloader extends Scene
             frameHeight: 206
         });
         this.load.spritesheet('shellyspade', 'shellyspade.png', {
-            frameWidth: 184, 
-            frameHeight: 235
+            frameWidth: 190, 
+            frameHeight: 206
+        });
+        this.load.spritesheet('shellygun', 'shellygun.png', {
+            frameWidth: 190, 
+            frameHeight: 206
         });
         this.load.spritesheet('jetpackspade', 'jetpackspade.png', {
             frameWidth: 190, 

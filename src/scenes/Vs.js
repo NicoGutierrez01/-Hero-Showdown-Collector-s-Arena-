@@ -21,7 +21,7 @@ export class Vs extends Scene {
         this.player1texture = data.player1;
         this.player2texture = data.player2;
         if (!this.TrackGame || !this.TrackGame.isPlaying) {
-            this.TrackGame = this.sound.add('TrackGame', { volume: savedVolume / 100 });
+            this.TrackGame = this.sound.add('TrackGame', { volume: savedVolume / 100, loop: true });
             this.TrackGame.play();
         } else if (this.TrackGame.isPaused) {
             this.TrackGame.resume();
@@ -74,14 +74,12 @@ export class Vs extends Scene {
             frameRate: 20,
             repeat: 0
         });
-
         this.anims.create({
             key: 'idle-1',
             frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 8, end: 13 }),
             frameRate: 12,
             repeat: 0
         });
-
         this.anims.create({
             key: 'jump-1',
             frames: this.anims.generateFrameNumbers(`${this.player1texture}${this.baseTexture}`, { start: 14, end: 17 }),
@@ -94,6 +92,7 @@ export class Vs extends Scene {
             frameRate: 15, 
             repeat: 0  
         });
+
         this.anims.create({
             key: 'walk-2',
             frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 0, end: 7 }),
@@ -112,7 +111,6 @@ export class Vs extends Scene {
             frameRate: 4, 
             repeat: 0  
         });
-
         this.anims.create({
             key: 'action-2',
             frames: this.anims.generateFrameNumbers(`${this.player2texture}${this.baseTexture}`, { start: 18, end: 30 }),

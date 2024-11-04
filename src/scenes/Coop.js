@@ -39,7 +39,7 @@ export class Coop extends Scene {
         this.player1Bullets = this.maxBullets;
         this.player2Bullets = this.maxBullets;
         if (!this.TrackGame || !this.TrackGame.isPlaying) {
-            this.TrackGame = this.sound.add('TrackGame', { volume: savedVolume / 100 });
+            this.TrackGame = this.sound.add('TrackGame', { volume: savedVolume / 100, loop: true });
             this.TrackGame.play();
         } else if (this.TrackGame.isPaused) {
             this.TrackGame.resume();
