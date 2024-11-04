@@ -29,10 +29,14 @@ export class Vs extends Scene {
     }
 
     create() {
-        this.anims.remove('walk');
-        this.anims.remove('idle');
-        this.anims.remove('jump');
-        this.anims.remove('action');
+        this.anims.remove('walk-1');
+        this.anims.remove('idle-1');
+        this.anims.remove('jump-1');
+        this.anims.remove('action-1');
+        this.anims.remove('walk-2');
+        this.anims.remove('idle-2');
+        this.anims.remove('jump-2');
+        this.anims.remove('action-2');
 
 
         this.timeRemaining = this.gameDuration / 1000; 

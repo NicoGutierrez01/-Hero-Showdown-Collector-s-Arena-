@@ -47,10 +47,15 @@ export class Coop extends Scene {
     }
 
     create() {
-        this.anims.remove('walk');
-        this.anims.remove('idle');
-        this.anims.remove('jump');
-        this.anims.remove('action');
+        this.anims.remove('walk-1');
+        this.anims.remove('idle-1');
+        this.anims.remove('jump-1');
+        this.anims.remove('action-1');
+        this.anims.remove('walk-2');
+        this.anims.remove('idle-2');
+        this.anims.remove('jump-2');
+        this.anims.remove('action-2');
+    
     
         this.player1Reloading = false;
         this.player2Reloading = false;
@@ -224,7 +229,7 @@ export class Coop extends Scene {
     
     movePlayer(player, direction) {
         const speed = 400;
-        const jumpVelocity = -500;
+        const jumpVelocity = -450;
 
         if (direction === 'left') {
             player.setVelocityX(-speed);
