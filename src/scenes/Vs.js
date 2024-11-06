@@ -63,11 +63,15 @@ export class Vs extends Scene {
         this.player1.setCollideWorldBounds(true);
         this.player1.setGravityY(300);
         this.player1.number = "1";
+        this.player1.setSize(190, 200); 
+        this.player1.setOffset(10, 10);
 
         this.player2 = this.physics.add.sprite(1440, 1000, this.player2texture).setScale(0.7);
         this.player2.setCollideWorldBounds(true);
         this.player2.setGravityY(300);
         this.player2.number = "2";
+        this.player2.setSize(190, 200); 
+        this.player2.setOffset(10, 10);
 
         this.physics.add.collider(this.player1, this.ground);
         this.physics.add.collider(this.player2, this.ground);        
@@ -177,11 +181,11 @@ export class Vs extends Scene {
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
-        this.player1ScoreText = this.add.text(620, 50, getPhrase('Jugador 1 :'),{
+        this.player1ScoreText = this.add.text(620, 50, getPhrase('Jugador 1:'),{
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
-        this.player2ScoreText = this.add.text(1300, 50, getPhrase('Jugador 2 :'),{
+        this.player2ScoreText = this.add.text(1300, 50, getPhrase('Jugador 2:'),{
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
@@ -260,11 +264,11 @@ export class Vs extends Scene {
             const damage = Phaser.Math.Between(5, 15); 
             if (attacker.number === this.player1.number && this.player1CanAttack) {
                 this.player1Score += damage;
-                this.player1ScoreText.setText(getPhrase(`Jugador 1: ${this.player1Score}`));
+                this.player1ScoreText.setText(getPhrase('Jugador 1:') + ' ' + this.player1Score);
                 this.player1CanAttack = false;  
             } else if (attacker.number === this.player2.number && this.player2CanAttack) {
                 this.player2Score += damage;
-                this.player2ScoreText.setText(getPhrase(`Jugador 2: ${this.player2Score}`));
+                this.player2ScoreText.setText(getPhrase('Jugador 2:') + ' ' + this.player2Score);
                 this.player2CanAttack = false;  
             }
             defender.setTint(0xff0000); 
@@ -290,7 +294,7 @@ export class Vs extends Scene {
     
                     object.play('explode');
                     this.player1Score -= randombob;
-                    this.player1ScoreText.setText(getPhrase(`Jugador 1: ${this.player1Score}`));
+                    this.player1ScoreText.setText(getPhrase('Jugador 1:') + ' ' + this.player1Score);
     
                     object.on('animationcomplete', () => {
                         object.destroy();
@@ -304,7 +308,7 @@ export class Vs extends Scene {
     
                     object.play('explode');
                     this.player2Score -= randombob;
-                    this.player2ScoreText.setText(getPhrase(`Jugador 2: ${this.player2Score}`));
+                    this.player2ScoreText.setText(getPhrase('Jugador 2:') + ' ' + this.player2Score);
     
                     object.on('animationcomplete', () => {
                         object.destroy();
@@ -322,7 +326,7 @@ export class Vs extends Scene {
                     object.hasCollided = true;
     
                     this.player1Score += randomPoints;
-                    this.player1ScoreText.setText(getPhrase(`Jugador 1: ${this.player1Score}`));
+                    this.player1ScoreText.setText(getPhrase('Jugador 1:') + ' ' + this.player1Score);
     
                     object.destroy();
                 }
@@ -333,7 +337,7 @@ export class Vs extends Scene {
                     object.hasCollided = true;
     
                     this.player2Score += randomPoints;
-                    this.player2ScoreText.setText(getPhrase(`Jugador 2: ${this.player2Score}`));
+                    this.player2ScoreText.setText(getPhrase('Jugador 2:') + ' ' + this.player2Score);
     
                     object.destroy();
                 }
@@ -382,4 +386,3 @@ export class Vs extends Scene {
         this.physics.add.collider(object, this.ground);
     }
 }   
- 

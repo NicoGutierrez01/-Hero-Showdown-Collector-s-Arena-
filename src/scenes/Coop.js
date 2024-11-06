@@ -68,13 +68,13 @@ export class Coop extends Scene {
         });
         
         this.add.image(960, 540, 'fondocoop');
-        this.devil = this.add.image(512, 100, 'devil').setScale(0.36);
+        this.devil = this.physics.add.image(512, 100, 'devil').setScale(0.36);
 
-        this.scoreText = this.add.text(1780, 50, getPhrase('Puntaje: '),{
+        this.scoreText = this.add.text(1780, 50, getPhrase('Puntaje:'),{
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
-        this.livesText = this.add.text(100, 50, getPhrase(`Vidas: ${this.sharedLives}`), {
+        this.livesText = this.add.text(100, 50, (getPhrase('Vidas:') + ' ' + this.sharedLives), {
             fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
@@ -100,11 +100,15 @@ export class Coop extends Scene {
         this.player1.setCollideWorldBounds(true);
         this.player1.setGravityY(300);
         this.player1.number = "1";
+        this.player1.setSize(190, 206); 
+        this.player1.setOffset(20, 10);
 
-        this.player2 = this.physics.add.sprite(1440, 1000, this.player2texture).setScale(0.7);
+        this.player2 = this.physics.add.sprite(1440, 1000, this.player2texture).setScale(0.7).setSize(180, 190);
         this.player2.setCollideWorldBounds(true);
         this.player2.setGravityY(300);
         this.player2.number = "2";
+        this.player2.setSize(290, 200); 
+        this.player2.setOffset(10, 10);
 
         this.physics.add.collider(this.player1, this.ground);
         this.physics.add.collider(this.player2, this.ground);        
@@ -278,7 +282,7 @@ export class Coop extends Scene {
     
                     object.play('explode');
                     this.sharedScore -= randombob;
-                    this.scoreText.setText(getPhrase(`Puntaje: ${this.sharedScore}`));
+                    this.scoreText.setText(getPhrase('Puntaje:') + ' ' + this.sharedScore);
     
                     object.on('animationcomplete', () => {
                         object.destroy();
@@ -292,7 +296,7 @@ export class Coop extends Scene {
     
                     object.play('explode');
                     this.sharedScore -= randombob;
-                    this.scoreText.setText(getPhrase(`Puntaje: ${this.sharedScore}`));
+                    this.scoreText.setText((getPhrase('Puntaje:') + ' ' + this.sharedScore));
     
                     object.on('animationcomplete', () => {
                         object.destroy();
@@ -313,7 +317,7 @@ export class Coop extends Scene {
     
                     if (this.sharedLives < 3) {
                         this.sharedLives ++;
-                        this.livesText.setText(getPhrase(`Vidas: ${this.sharedLives}`));
+                        this.livesText.setText(getPhrase('Vidas:') + ' ' + this.sharedLives);
                     }
                     object.destroy();
                 }
@@ -324,7 +328,7 @@ export class Coop extends Scene {
                     object.hasCollided = true;
     
                     this.sharedLives ++;
-                    this.livesText.setText(getPhrase(`Vidas: ${this.sharedLives}`));
+                    this.livesText.setText(getPhrase('Vidas:') + ' ' + this.sharedLives);
     
                     object.destroy();
                 }
@@ -441,7 +445,7 @@ export class Coop extends Scene {
             const scoreIncrement = Phaser.Math.Between(5, 20);
             this.sharedScore += scoreIncrement;
             this.jawasKilled++;
-            this.scoreText.setText(getPhrase('Puntaje : ') + this.sharedScore);
+            this.scoreText.setText(getPhrase('Puntaje:') + ' ' + this.sharedScore);
         });
     
         this.physics.add.collider(bullet, this.ground, () => {
@@ -486,7 +490,7 @@ export class Coop extends Scene {
 
         this.sharedLives--;
 
-        this.livesText.setText(getPhrase(`Vidas: ${this.sharedLives}`));
+        this.livesText.setText(getPhrase('Vidas:') + ' ' + this.sharedLives);
 
         console.log(`sharedLives: ${this.sharedLives}, sharedScore: ${this.sharedScore}, jawasKilled: ${this.jawasKilled}`);
 
