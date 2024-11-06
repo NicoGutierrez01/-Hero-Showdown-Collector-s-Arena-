@@ -15,13 +15,13 @@ export class GameOver extends Scene {
         this.add.image(960, 540, 'fondomenu');
 
         this.add.text(480, 440, (getPhrase('Puntos jugador 1:') + ' ' + this.player1Score), {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
         this.add.text(1440, 440, (getPhrase('Puntos jugador 2:') + ' ' + this.player2Score), {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
@@ -40,7 +40,7 @@ export class GameOver extends Scene {
         }).setOrigin(0.5);
 
         const buttonBack = this.add.text(80, 1040, getPhrase('Menu'), {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
@@ -51,7 +51,7 @@ export class GameOver extends Scene {
         });
 
         const buttonRestart = this.add.text(1800, 1040, getPhrase('Reiniciar'), {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);

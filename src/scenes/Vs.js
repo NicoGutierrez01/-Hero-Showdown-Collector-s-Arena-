@@ -164,11 +164,18 @@ export class Vs extends Scene {
         this.fallingObjects = this.physics.add.group();
 
         this.time.addEvent({
-            delay: 15000, 
+            delay: 10000, 
             callback: this.spawnFallingObject,
             callbackScope: this,
             loop: true
         });
+
+        this.time.addEvent({
+            delay: 5000, 
+            callback: this.spawnBomb,
+            callbackScope: this,
+            loop: true
+        });        
 
         this.physics.add.overlap(this.player1, this.fallingObjects, this.collectObject, null, this);
         this.physics.add.overlap(this.player2, this.fallingObjects, this.collectObject, null, this);
@@ -178,15 +185,15 @@ export class Vs extends Scene {
         this.physics.world.setBoundsCollision(true, true, true, true);
 
         this.timerText = this.add.text(960, 50, formattedTime, {
-            fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
+            fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
         this.player1ScoreText = this.add.text(620, 50, getPhrase('Jugador 1:'),{
-            fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
+            fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
         this.player2ScoreText = this.add.text(1300, 50, getPhrase('Jugador 2:'),{
-            fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
+            fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
         this.time.addEvent({
@@ -277,57 +284,22 @@ export class Vs extends Scene {
     }
     
     spawnFallingObject() {
-        const xPosition = Phaser.Math.Between(50, 974); 
+        const xPosition = Phaser.Math.Between(50, 974);
         const yPosition = Phaser.Math.Between(50, 1030);
         let object;
-        const objectType = Phaser.Math.Between(1, 3); 
+        const objectType = Phaser.Math.Between(1, 2); 
     
         if (objectType === 1) {
-            object = new Bomb(this, xPosition, 0).setScale(0.4);
+            object = new Points(this, xPosition, yPosition).setScale(0.07);
             object.hasCollided = false;
-
-            const randombob = Phaser.Math.Between(10, 50);
-            
-            this.physics.add.overlap(object, this.player1, () => {
-                if (!object.hasCollided) {
-                    object.hasCollided = true;
     
-                    object.play('explode');
-                    this.player1Score -= randombob;
-                    this.player1ScoreText.setText(getPhrase('Jugador 1:') + ' ' + this.player1Score);
-    
-                    object.on('animationcomplete', () => {
-                        object.destroy();
-                    });
-                }
-            });
-    
-            this.physics.add.overlap(object, this.player2, () => {
-                if (!object.hasCollided) {
-                    object.hasCollided = true;
-    
-                    object.play('explode');
-                    this.player2Score -= randombob;
-                    this.player2ScoreText.setText(getPhrase('Jugador 2:') + ' ' + this.player2Score);
-    
-                    object.on('animationcomplete', () => {
-                        object.destroy();
-                    });
-                }
-            });
-        } if (objectType === 2) {
-            object = new Points(this, xPosition, yPosition).setScale(0.4);
-            object.hasCollided = false;
-            
             const randomPoints = Phaser.Math.Between(20, 60);
     
             this.physics.add.overlap(object, this.player1, () => {
                 if (!object.hasCollided) {
                     object.hasCollided = true;
-    
                     this.player1Score += randomPoints;
                     this.player1ScoreText.setText(getPhrase('Jugador 1:') + ' ' + this.player1Score);
-    
                     object.destroy();
                 }
             });
@@ -335,54 +307,88 @@ export class Vs extends Scene {
             this.physics.add.overlap(object, this.player2, () => {
                 if (!object.hasCollided) {
                     object.hasCollided = true;
-    
                     this.player2Score += randomPoints;
                     this.player2ScoreText.setText(getPhrase('Jugador 2:') + ' ' + this.player2Score);
-    
                     object.destroy();
                 }
             });
-        } if (objectType === 3) {
-            object = new Velocity(this, xPosition, yPosition).setScale(0.4);
+        } else if (objectType === 2) {
+            object = new Velocity(this, xPosition, yPosition).setScale(0.07);
             object.hasCollided = false;
-            
-            const speedBoost = 200; 
-            const boostDuration = 5000; 
-        
+    
+            const speedBoost = 200;
+            const boostDuration = 5000;
+    
             this.physics.add.overlap(object, this.player1, () => {
                 if (!object.hasCollided) {
                     object.hasCollided = true;
-        
-                    const originalSpeed = this.player1.speed || 400; 
+    
+                    const originalSpeed = this.player1.speed || 400;
                     this.player1.speed = originalSpeed + speedBoost;
-                    console.log(`Velocidad de Jugador 1 aumentada a ${this.player1.speed}`);
-        
+    
                     this.time.delayedCall(boostDuration, () => {
-                        this.player1.speed = originalSpeed; 
-                        console.log(`Velocidad de Jugador 1 restaurada a ${originalSpeed}`);
+                        this.player1.speed = originalSpeed;
                     });
-        
+    
                     object.destroy();
                 }
             });
-        
+    
             this.physics.add.overlap(object, this.player2, () => {
                 if (!object.hasCollided) {
                     object.hasCollided = true;
-        
-                    const originalSpeed = this.player2.speed || 400; 
+    
+                    const originalSpeed = this.player2.speed || 400;
                     this.player2.speed = originalSpeed + speedBoost;
-                    console.log(`Velocidad de Jugador 2 aumentada a ${this.player2.speed}`);
-        
+    
                     this.time.delayedCall(boostDuration, () => {
-                        this.player2.speed = originalSpeed; 
-                        console.log(`Velocidad de Jugador 2 restaurada a ${originalSpeed}`);
+                        this.player2.speed = originalSpeed;
                     });
-        
+    
                     object.destroy();
                 }
             });
-        }        
+        }
+    
         this.physics.add.collider(object, this.ground);
     }
+    
+
+    spawnBomb() {
+        const xPosition = Phaser.Math.Between(50, 974);
+        const bomb = new Bomb(this, xPosition, 0).setScale(0.4);
+        bomb.hasCollided = false;
+    
+        const randombob = Phaser.Math.Between(10, 50);
+    
+        this.physics.add.overlap(bomb, this.player1, () => {
+            if (!bomb.hasCollided) {
+                bomb.hasCollided = true;
+    
+                bomb.play('explode');
+                this.player1Score -= randombob;
+                this.player1ScoreText.setText(getPhrase('Jugador 1:') + ' ' + this.player1Score);
+    
+                bomb.on('animationcomplete', () => {
+                    bomb.destroy();
+                });
+            }
+        });
+    
+        this.physics.add.overlap(bomb, this.player2, () => {
+            if (!bomb.hasCollided) {
+                bomb.hasCollided = true;
+    
+                bomb.play('explode');
+                this.player2Score -= randombob;
+                this.player2ScoreText.setText(getPhrase('Jugador 2:') + ' ' + this.player2Score);
+    
+                bomb.on('animationcomplete', () => {
+                    bomb.destroy();
+                });
+            }
+        });
+    
+        this.physics.add.collider(bomb, this.ground);
+    } 
 }   

@@ -19,6 +19,8 @@ export class Preloader extends Scene
         this.load.image('fondomenu', 'fondomenu.png'); 
         this.load.image('fondomode', 'fondomode.png');
         this.load.image('fondocoop', 'fondocoop.png');
+        this.load.image('wasd', 'wasd.png');
+        this.load.image('flechas', 'flechas.png');
 
         //titles
         this.load.image('peztitle', 'peztitle.png');
@@ -99,6 +101,7 @@ export class Preloader extends Scene
         this.load.image('points', 'ItemPoints.png');
         this.load.image('life', 'ItemLife.png');
         this.load.image('velocity', 'ItemVelocity.png');
+        this.load.image('Lives', 'Lives.png');
         
         this.load.image('triangle', 'triangle.png');
 

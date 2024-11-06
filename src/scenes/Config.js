@@ -43,7 +43,7 @@ export class Config extends Scene {
         this.obtenerTraducciones(ES_AR);
 
         this.idioma = this.add.text(960, 270, getPhrase('Idioma'), {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            fontFamily: 'Cooper Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
@@ -56,7 +56,7 @@ export class Config extends Scene {
         let currentFlagIndex = 0;
 
         this.sonido = this.add.text(960, 540, getPhrase('Sonido'), {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            fontFamily: 'Cooper Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
@@ -65,19 +65,19 @@ export class Config extends Scene {
         const volumeBar = this.add.rectangle(885, 640, (volume / 100) * 150, 20, 0xffffff).setOrigin(0, 0.5);
 
         this.pantalla = this.add.text(960, 810, getPhrase('Pantalla'), {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            fontFamily: 'Cooper Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
         this.Fullscreen = this.add.text(960, 910, getPhrase('Completa'), {
-            fontFamily: 'Arial Black', fontSize: 32, color: '#ffffff',
+            fontFamily: 'Cooper Black', fontSize: 32, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
 
         this.buttonBack = this.add.text(80, 1040, getPhrase('Atras'), {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            fontFamily: 'Cooper Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);

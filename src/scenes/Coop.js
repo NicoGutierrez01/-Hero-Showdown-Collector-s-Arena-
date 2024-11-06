@@ -69,14 +69,16 @@ export class Coop extends Scene {
         
         this.add.image(960, 540, 'fondocoop');
         this.devil = this.physics.add.image(512, 100, 'devil').setScale(0.36);
+        this.devil.setImmovable(true);
+        this.devil.body.allowGravity = false; 
 
         this.scoreText = this.add.text(1780, 50, getPhrase('Puntaje:'),{
-            fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
+            fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
-        this.livesText = this.add.text(100, 50, (getPhrase('Vidas:') + ' ' + this.sharedLives), {
-            fontFamily: 'Arial', fontSize: 38, color: '#ffffff', align: 'center'
-        }).setOrigin(0.5);
+        this.livesImages = this.add.group();
+
+        this.updateLivesDisplay();
 
         this.tweens.add({
             targets: this.devil,
@@ -200,7 +202,7 @@ export class Coop extends Scene {
         this.fallingObjects = this.physics.add.group();
 
         this.time.addEvent({
-            delay: 15000, 
+            delay: 10000, 
             callback: this.spawnFallingObject,
             callbackScope: this,
             loop: true
@@ -229,6 +231,16 @@ export class Coop extends Scene {
         this.jawaGroup.children.iterate(jawa => {
             jawa.followPlayer(this.player1, this.player2, this.jawaSpeed);
         });
+    }
+
+    updateLivesDisplay() {
+        this.livesImages.clear(true, true);
+    
+        for (let i = 0; i < this.sharedLives; i++) {
+            const lifeImage = this.add.image(50 + i * 40, 50, 'Lives'); 
+            lifeImage.setScale(0.05); 
+            this.livesImages.add(lifeImage);
+        }
     }
     
     movePlayer(player, direction) {
@@ -306,7 +318,7 @@ export class Coop extends Scene {
         } 
         
         if (objectType === 2) {
-            object = new Life(this, xPosition, yPosition).setScale(0.4);
+            object = new Life(this, xPosition, yPosition).setScale(0.07);
             object.hasCollided = false;
             
             const randomPoints = Phaser.Math.Between(20, 60);
@@ -317,7 +329,7 @@ export class Coop extends Scene {
     
                     if (this.sharedLives < 3) {
                         this.sharedLives ++;
-                        this.livesText.setText(getPhrase('Vidas:') + ' ' + this.sharedLives);
+                        this.updateLivesDisplay();
                     }
                     object.destroy();
                 }
@@ -327,8 +339,10 @@ export class Coop extends Scene {
                 if (!object.hasCollided) {
                     object.hasCollided = true;
     
-                    this.sharedLives ++;
-                    this.livesText.setText(getPhrase('Vidas:') + ' ' + this.sharedLives);
+                    if (this.sharedLives < 3) {
+                        this.sharedLives ++;
+                        this.updateLivesDisplay();
+                    }
     
                     object.destroy();
                 }
@@ -413,29 +427,43 @@ export class Coop extends Scene {
     shootBullet(player) {
         const bulletSpeed = 300;
     
-        if (!this[`player${player.number}CanAttack`] || this[`player${player.number}Bullets`] <= 0 || this.jawaGroup.countActive(true) === 0) return;
+        if (!this[`player${player.number}CanAttack`] || this[`player${player.number}Bullets`] <= 0) return;
     
         player.anims.play(`action-${player.number}`, true);
     
-        const targetJawa = this.findClosestJawa(player, this.jawaGroup);
+        const closestJawa = this.findClosestJawa(player, this.jawaGroup);
+        
+        let target = null;
+        if (this.devil && this.devil.active) {
+            const distanceToDevil = Phaser.Math.Distance.Between(player.x, player.y, this.devil.x, this.devil.y);
+            const distanceToJawa = closestJawa ? Phaser.Math.Distance.Between(player.x, player.y, closestJawa.x, closestJawa.y) : Infinity;
+    
+            target = distanceToJawa <= distanceToDevil ? closestJawa : this.devil;
+        } else {
+            target = closestJawa;
+        }
     
         const bullet = new Bullet(this, player.x, player.y);
         bullet.body.setCollideWorldBounds(true);
         bullet.body.onWorldBounds = true;
     
-        if (targetJawa) {
-            const angle = Phaser.Math.Angle.Between(player.x, player.y, targetJawa.x, targetJawa.y);
+        if (target) {
+            const angle = Phaser.Math.Angle.Between(player.x, player.y, target.x, target.y);
             bullet.body.setVelocity(
                 bulletSpeed * Math.cos(angle),
                 bulletSpeed * Math.sin(angle)
             );
         } else {
-            bullet.body.setVelocity(0, -bulletSpeed);
+            bullet.body.setVelocity(0, -bulletSpeed); 
         }
     
         this[`player${player.number}Bullets`]--;
         if (this[`player${player.number}Bullets`] <= 0 && !this[`player${player.number}Reloading`]) {
             this.reloadPlayerBullets(player.number);
+        }
+    
+        if (this.devil && this.devil.active) {
+            this.physics.add.collider(bullet, this.devil, this.onDevilHit, null, this);
         }
     
         this.physics.add.collider(bullet, this.jawaGroup, (bullet, jawa) => {
@@ -451,13 +479,33 @@ export class Coop extends Scene {
         this.physics.add.collider(bullet, this.ground, () => {
             bullet.destroy();
         });
-
+    
         bullet.body.onWorldBounds = true;
         this.physics.world.on('worldbounds', (body) => {
             if (body.gameObject === bullet) {
                 bullet.destroy();
             }
         });
+    }    
+    
+    onDevilHit(bullet, devil) {
+        bullet.destroy();
+    
+        if (!devil.health) {
+            devil.health = 50000000; 
+        }
+        devil.health--;
+    
+        if (devil.health <= 0) {
+            devil.destroy(); 
+            this.sharedScore += 150; 
+            this.scoreText.setText(getPhrase('Puntaje:') + ' ' + this.sharedScore);
+        } else {
+            devil.setTint(0xff0000); 
+            this.time.delayedCall(100, () => devil.clearTint()); 
+        }
+
+        devil.setPosition(devil.x, devil.y);
     }
     
     reloadPlayerBullets(playerNumber) {
@@ -487,13 +535,12 @@ export class Coop extends Scene {
     
     jawaCollision(player, jawa) {
         jawa.destroy();
-
         this.sharedLives--;
-
-        this.livesText.setText(getPhrase('Vidas:') + ' ' + this.sharedLives);
-
+    
+        this.updateLivesDisplay();
+    
         console.log(`sharedLives: ${this.sharedLives}, sharedScore: ${this.sharedScore}, jawasKilled: ${this.jawasKilled}`);
-
+    
         if (this.sharedLives <= 0) {
             this.TrackGame.pause();
             this.scene.start('GameOver2', { 
@@ -501,5 +548,5 @@ export class Coop extends Scene {
                 jawasKilled: this.jawasKilled 
             });
         } 
-    }    
+    }  
 }
