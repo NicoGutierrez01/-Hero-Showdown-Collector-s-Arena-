@@ -8,7 +8,7 @@ export class Bomb extends Phaser.GameObjects.Sprite {
 
         this.body.setGravityY(0);
 
-        this.body.setVelocity(Phaser.Math.Between(200, 300), Phaser.Math.Between(200, 300));
+        this.body.setVelocity(Phaser.Math.Between(400, 500), Phaser.Math.Between(400, 500));
 
         this.body.setCollideWorldBounds(true);
         this.body.setBounce(1); 

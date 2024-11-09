@@ -72,7 +72,7 @@ export class Coop extends Scene {
         this.devil.setImmovable(true);
         this.devil.body.allowGravity = false; 
 
-        this.scoreText = this.add.text(1780, 50, getPhrase('Puntaje:'),{
+        this.scoreText = this.add.text(100, 50, getPhrase('Puntaje:'),{
             fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
@@ -82,7 +82,7 @@ export class Coop extends Scene {
 
         this.tweens.add({
             targets: this.devil,
-            x: { from: 250, to: 1670 }, 
+            x: { from: 350, to: 1570 }, 
             duration: 4000, 
             ease: 'Linear', 
             yoyo: true, 
@@ -225,6 +225,15 @@ export class Coop extends Scene {
 
         this.physics.add.overlap(this.player1, this.jawaGroup, this.jawaCollision, null, this);
         this.physics.add.overlap(this.player2, this.jawaGroup, this.jawaCollision, null, this);
+
+        const backButton = this.add.image(1870, 50, 'botonback')
+
+        backButton.setInteractive({ cursor: 'pointer' });
+    
+        backButton.on('pointerdown', () => {
+            this.TrackGame.pause();
+            this.scene.start('MainMenu');
+        });
     }
 
     update() {
@@ -237,7 +246,7 @@ export class Coop extends Scene {
         this.livesImages.clear(true, true);
     
         for (let i = 0; i < this.sharedLives; i++) {
-            const lifeImage = this.add.image(50 + i * 40, 50, 'Lives'); 
+            const lifeImage = this.add.image(1700 + i * 40, 50, 'Lives'); 
             lifeImage.setScale(0.05); 
             this.livesImages.add(lifeImage);
         }
@@ -495,11 +504,11 @@ export class Coop extends Scene {
             devil.health = 50000000; 
         }
         devil.health--;
-    
+        this.sharedScore += 150; 
+        this.scoreText.setText(getPhrase('Puntaje:') + ' ' + this.sharedScore);
+
         if (devil.health <= 0) {
             devil.destroy(); 
-            this.sharedScore += 150; 
-            this.scoreText.setText(getPhrase('Puntaje:') + ' ' + this.sharedScore);
         } else {
             devil.setTint(0xff0000); 
             this.time.delayedCall(100, () => devil.clearTint()); 

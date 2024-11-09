@@ -21,6 +21,7 @@ export class Preloader extends Scene
         this.load.image('fondocoop', 'fondocoop.png');
         this.load.image('wasd', 'wasd.png');
         this.load.image('flechas', 'flechas.png');
+        this.load.image('fondocharacters', 'fondocharacters.png');
 
         //titles
         this.load.image('peztitle', 'peztitle.png');
@@ -104,6 +105,7 @@ export class Preloader extends Scene
         this.load.image('Lives', 'Lives.png');
         
         this.load.image('triangle', 'triangle.png');
+        this.load.image('botonback', 'botonback.png');
 
         this.load.setPath('video');
 

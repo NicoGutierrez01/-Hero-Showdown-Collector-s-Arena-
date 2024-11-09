@@ -47,10 +47,6 @@ export class MainMenu extends Scene
         buttonCredits.setInteractive({ cursor: 'pointer' });
         buttonConfig.setInteractive({ cursor: 'pointer' });
         
-        this.r = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-
-
-
         buttonPlay.on('pointerdown', () => {
             this.TrackMenu.pause();
             this.scene.start('Controls');
@@ -64,12 +60,5 @@ export class MainMenu extends Scene
         buttonCredits.on('pointerdown', () =>{
             this.scene.start('Credits');
         });
-    }
-
-    update(){
-        if (this.r.isDown) {
-            this.scene.start('Inicio');
-            this.TrackMenu.pause();
-          }
     }
 }

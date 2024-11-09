@@ -9,9 +9,9 @@ import { getPhrase } from '../service/translations';
 export class Vs extends Scene {
     constructor() {
         super('Vs');
-        this.gameDuration = 150000; 
-        this.player1Score = 0;
-        this.player2Score = 0;
+        this.gameDuration = 90000; 
+        this.player1ScoreInitial = 0;
+        this.player2ScoreInitial = 0;
         this.gameOver = false;
         this.baseTexture = "spade";
     }
@@ -26,6 +26,8 @@ export class Vs extends Scene {
         } else if (this.TrackGame.isPaused) {
             this.TrackGame.resume();
         }
+        this.player1Score = this.player1ScoreInitial;
+        this.player2Score = this.player2ScoreInitial;
     }
 
     create() {
@@ -213,6 +215,14 @@ export class Vs extends Scene {
 
         this.physics.world.setBoundsCollision(true, true, true, true);
 
+        const backButton = this.add.image(1870, 50, 'botonback')
+
+        backButton.setInteractive({ cursor: 'pointer' });
+    
+        backButton.on('pointerdown', () => {
+            this.TrackGame.pause();
+            this.scene.start('MainMenu');
+        });
     }
 
     updateTimer() {

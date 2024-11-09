@@ -25,17 +25,17 @@ export class Characters extends Scene {
 
         let previouseCard = null;
         const planes = [
-            new Card(this, 480, this.scale.height - 810, "lolo", {
-                titleTexture: "hierrotitle",
-                characterTexture: "hierro"
+            new Card(this, 480, this.scale.height - 810, "nico", {
+                titleTexture: "jetpacktitle",
+                characterTexture: "jetpack"
             }).setScale(1),
             new Card(this, 960, this.scale.height - 270, "san", {
                 titleTexture: "pandatitle",
                 characterTexture: "panda"
             }).setScale(1),
-            new Card(this, 480, this.scale.height - 270, "nico", {
-                titleTexture: "jetpacktitle",
-                characterTexture: "jetpack"
+            new Card(this, 480, this.scale.height - 270,"lolo", {
+                titleTexture: "hierrotitle",
+                characterTexture: "hierro"
             }).setScale(1),
             new Card(this, 1440, this.scale.height - 810, "blito", {
                 titleTexture: "peztitle",
@@ -77,7 +77,7 @@ export class Characters extends Scene {
 
     createUI() {
         const buttonBack = this.add.text(80, 1040, getPhrase('Atras'), {
-            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            fontFamily: 'Cooper Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
@@ -95,7 +95,7 @@ export class Characters extends Scene {
         }
 
         this.startMessage = this.add.text(this.scale.width / 2, this.scale.height / 2, getPhrase('Comenzar'), {
-            fontFamily: 'Arial Black', fontSize: 48, color: '#00ff00',
+            fontFamily: 'Cooper Black', fontSize: 48, color: '#00ff00',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
