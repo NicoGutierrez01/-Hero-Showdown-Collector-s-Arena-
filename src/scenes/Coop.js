@@ -20,6 +20,7 @@ export class Coop extends Scene {
         this.initialLives = 3;
         this.initialSpawnDelay = 10000; 
         this.initialJawaSpeed = 100; 
+        this.initialsharedTime = 0;
         this.spawnMultiplier = 0.95; 
         this.speedIncrement = 20;
         this.baseTexture = "gun";
@@ -38,6 +39,7 @@ export class Coop extends Scene {
         this.reloadTime = 2000;    
         this.player1Bullets = this.maxBullets;
         this.player2Bullets = this.maxBullets;
+        this.sharedTime = this.initialsharedTime;
         if (!this.TrackGame || !this.TrackGame.isPlaying) {
             this.TrackGame = this.sound.add('TrackGame', { volume: savedVolume / 100, loop: true });
             this.TrackGame.play();
@@ -55,8 +57,14 @@ export class Coop extends Scene {
         this.anims.remove('idle-2');
         this.anims.remove('jump-2');
         this.anims.remove('action-2');
-    
-    
+
+        this.anims.create({
+            key: 'devil',
+            frames: this.anims.generateFrameNumbers('animdevil', { start: 0, end: 8 }), 
+            frameRate: 10,
+            repeat: -1 
+        });
+        
         this.player1Reloading = false;
         this.player2Reloading = false;
 
@@ -68,17 +76,25 @@ export class Coop extends Scene {
         });
         
         this.add.image(960, 540, 'fondocoop');
-        this.devil = this.physics.add.image(512, 100, 'devil').setScale(0.36);
+        this.devil = this.physics.add.sprite(512, 100, 'animdevil').setScale(0.36);
+        this.devil.anims.play('devil');      
         this.devil.setImmovable(true);
         this.devil.body.allowGravity = false; 
 
-        this.scoreText = this.add.text(100, 50, getPhrase('Puntaje:'),{
+        this.scoreText = this.add.text(130, 50, getPhrase('Puntaje:'),{
             fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff', align: 'center'
         }).setOrigin(0.5);
 
         this.livesImages = this.add.group();
 
         this.updateLivesDisplay();
+
+        this.sharedTimer = this.time.addEvent({
+            delay: 1000, 
+            callback: () => this.sharedTime++,
+            callbackScope: this,
+            loop: true
+        });
 
         this.tweens.add({
             targets: this.devil,
@@ -92,11 +108,11 @@ export class Coop extends Scene {
         this.physics.add.staticImage(960, 1080, 'negro').setDisplaySize(1920, 50).setOrigin(0.5, 0.5).refreshBody(); 
         this.ground = this.physics.add.staticGroup();
         
-        this.ground.add(this.physics.add.staticImage(960, 540, 'negro').setDisplaySize(350, 30).setOrigin(0.5, 0.5).refreshBody());  
-        this.ground.add(this.physics.add.staticImage(200, 810, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody());    
-        this.ground.add(this.physics.add.staticImage(1720, 810, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody()); 
-        this.ground.add(this.physics.add.staticImage(200, 270, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody()); 
-        this.ground.add(this.physics.add.staticImage(1720, 270, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody()); 
+        this.ground.add(this.physics.add.staticImage(960, 540, 'platform').setOrigin(0.5, 0.5).refreshBody().setSize(400,30));  
+        this.ground.add(this.physics.add.staticImage(200, 810, 'platform').setOrigin(0.5, 0.5).refreshBody().setSize(400,30));    
+        this.ground.add(this.physics.add.staticImage(1720, 810, 'platform').setOrigin(0.5, 0.5).refreshBody().setSize(400,30)); 
+        this.ground.add(this.physics.add.staticImage(200, 270, 'platform').setOrigin(0.5, 0.5).refreshBody().setSize(400,30)); 
+        this.ground.add(this.physics.add.staticImage(1720, 270, 'platform').setOrigin(0.5, 0.5).refreshBody().setSize(400,30)); 
 
         this.player1 = this.physics.add.sprite(480, 1000, this.player1texture).setScale(0.7);
         this.player1.setCollideWorldBounds(true);
@@ -434,7 +450,7 @@ export class Coop extends Scene {
     }
 
     shootBullet(player) {
-        const bulletSpeed = 300;
+        const bulletSpeed = 500;
     
         if (!this[`player${player.number}CanAttack`] || this[`player${player.number}Bullets`] <= 0) return;
     
@@ -552,9 +568,13 @@ export class Coop extends Scene {
     
         if (this.sharedLives <= 0) {
             this.TrackGame.pause();
+            this.sharedTimer.remove();
+
+
             this.scene.start('GameOver2', { 
                 sharedScore: this.sharedScore, 
-                jawasKilled: this.jawasKilled 
+                jawasKilled: this.jawasKilled,
+                sharedTime: this.sharedTime
             });
         } 
     }  

@@ -88,7 +88,10 @@ export class Preloader extends Scene
         this.load.image('EEUU', 'EEUU.png');
         
         //boss
-        this.load.image('devil', 'devil.png');
+        this.load.spritesheet('animdevil', 'animdevil.png', {
+            frameWidth: 813, 
+            frameHeight: 561
+        });
 
         //subditos
         this.load.image('jawaA', 'jawaA.png');
@@ -96,7 +99,8 @@ export class Preloader extends Scene
 
         //platforms
         this.load.image('platform', 'platform.png');
-        this.load.image('negro','negro.png');
+        this.load.image('platform2', 'platform2.png');
+        this.load.image('negro', 'negro.png');
 
         //items
         this.load.image('points', 'ItemPoints.png');
@@ -118,6 +122,20 @@ export class Preloader extends Scene
         this.load.audio('TrackMenu', 'TrackMenu.mp3');
         this.load.audio('TrackGame', 'TrackGame.mp3');
         this.load.audio('TrackConfig', 'TrackConfig.flac');
+
+        //audio fx
+        this.load.audio('Bomba', 'Bomba.mp3');
+        this.load.audio('Bossdaño', 'Bossdaño.mp3');
+        this.load.audio('BotonJUGAR', 'BotonJUGAR.mp3');
+        this.load.audio('espada1', 'espada1.mp3');
+        this.load.audio('espada2', 'espada2.mp3');
+        this.load.audio('espada3', 'espada3.mp3');
+        this.load.audio('Heroessalto', 'Heroessalto.mp3');
+        this.load.audio('interfaz1', 'interfaz1.mp3');
+        this.load.audio('interfaz2', 'interfaz2.mp3');
+        this.load.audio('item', 'item.mp3');
+        this.load.audio('Pistola', 'Pistola.mp3');
+        this.load.audio('subdito', 'subdito.mp3');
     }
 
     create ()

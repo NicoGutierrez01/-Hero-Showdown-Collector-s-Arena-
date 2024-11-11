@@ -52,14 +52,14 @@ export class Vs extends Scene {
 
         this.add.image(960, 540, 'fondovs');
 
-        this.physics.add.staticImage(960, 1080, 'negro').setDisplaySize(1920, 50).setOrigin(0.5, 0.5).refreshBody(); 
+        this.physics.add.staticImage(960, 1080, 'negro').setDisplaySize(1920, 50).setOrigin(0.5, 0.5).refreshBody();
         this.ground = this.physics.add.staticGroup();
         
-        this.ground.add(this.physics.add.staticImage(960, 540, 'negro').setDisplaySize(350, 30).setOrigin(0.5, 0.5).refreshBody());  
-        this.ground.add(this.physics.add.staticImage(200, 810, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody());    
-        this.ground.add(this.physics.add.staticImage(1720, 810, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody()); 
-        this.ground.add(this.physics.add.staticImage(200, 270, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody()); 
-        this.ground.add(this.physics.add.staticImage(1720, 270, 'negro').setDisplaySize(400, 30).setOrigin(0.5, 0.5).refreshBody()); 
+        this.ground.add(this.physics.add.staticImage(960, 540, 'platform2').setOrigin(0.5, 0.5).refreshBody().setSize(400,30));  
+        this.ground.add(this.physics.add.staticImage(200, 810, 'platform2').setOrigin(0.5, 0.5).refreshBody().setSize(400,30));    
+        this.ground.add(this.physics.add.staticImage(1720, 810, 'platform2').setOrigin(0.5, 0.5).refreshBody().setSize(400,30)); 
+        this.ground.add(this.physics.add.staticImage(200, 270, 'platform2').setOrigin(0.5, 0.5).refreshBody().setSize(400,30)); 
+        this.ground.add(this.physics.add.staticImage(1720, 270, 'platform2').setOrigin(0.5, 0.5).refreshBody().setSize(400,30)); 
 
         this.player1 = this.physics.add.sprite(480, 1000, this.player1texture).setScale(0.7);
         this.player1.setCollideWorldBounds(true);

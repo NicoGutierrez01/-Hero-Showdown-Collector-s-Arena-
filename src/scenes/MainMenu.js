@@ -53,11 +53,11 @@ export class MainMenu extends Scene
         });
 
         buttonConfig.on('pointerdown', () => {
-            this.TrackMenu.pause();
+            this.TrackMenu.pause();          
             this.scene.start('Config');
         });
 
-        buttonCredits.on('pointerdown', () =>{
+        buttonCredits.on('pointerdown', () =>{          
             this.scene.start('Credits');
         });
     }
