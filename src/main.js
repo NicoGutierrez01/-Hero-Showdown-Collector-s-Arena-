@@ -11,6 +11,8 @@ import { Config } from './scenes/Config';
 import { Credits } from './scenes/Credits';
 import { GameOver2 } from './scenes/GameOver2';
 import { Controls } from './scenes/Controls';
+import { Login } from './scenes/Login';
+import { FirebasePlugin } from './service/FirebasePlugin';
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -32,8 +34,19 @@ const config = {
 
         },
     },
+    plugins: {
+        global: [
+          {
+            key: "FirebasePlugin",
+            plugin: FirebasePlugin,
+            start: true,
+            mapping: "firebase",
+          },
+        ],
+      },
     scene: [
         Boot,
+        Login,
         Preloader,
         MainMenu,
         GameOver,
@@ -45,8 +58,8 @@ const config = {
         Coop,
         Config,
         Credits,
-        Controls
-    ]
+        Controls,
+    ],
 };
 
 export default new Phaser.Game(config);
