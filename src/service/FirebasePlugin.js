@@ -14,8 +14,6 @@ import {
 } from "firebase/firestore";
 import {
   getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
   signInAnonymously,
   signInWithPopup,
   onAuthStateChanged,
@@ -29,8 +27,7 @@ const firebaseConfig = {
     projectId: "heroshowdown-d7c98",
     storageBucket: "heroshowdown-d7c98.firebasestorage.app",
     messagingSenderId: "53926859400",
-    appId: "1:53926859400:web:93f34c4165dfbfc2f7853d",
-    measurementId: "G-KS6XWCJMZM"
+    appId: "1:53926859400:web:93f34c4165dfbfc2f7853d"
 };
 
 export  class FirebasePlugin extends Phaser.Plugins.BasePlugin {
@@ -64,24 +61,6 @@ export  class FirebasePlugin extends Phaser.Plugins.BasePlugin {
   async loadGameData(userId) {
     const snap = await getDoc(doc(this.db, "game-data", userId));
     return snap.data();
-  }
-
-  async createUserWithEmail(email, password) {
-    const credentials = await createUserWithEmailAndPassword(
-      this.auth,
-      email,
-      password
-    );
-    return credentials.user;
-  }
-
-  async signInWithEmail(email, password) {
-    const credentials = await signInWithEmailAndPassword(
-      this.auth,
-      email,
-      password
-    );
-    return credentials.user;
   }
 
   async signInAnonymously() {
