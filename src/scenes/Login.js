@@ -8,7 +8,8 @@ export class Login extends Phaser.Scene {
   create() {
     this.add.image(960, 540, 'fondomenu'); 
     this.add.image(960, 590, 'anonymous').setScale(0.5);
-    this.add.image(960, 790, 'google').setScale(0.15);
+    this.add.image(960, 750, 'google').setScale(0.15);
+    this.add.image(960, 920, 'github').setScale(0.25);
 
 
     this.add.text(960, 300, ('Login'), {
@@ -30,12 +31,12 @@ export class Login extends Phaser.Scene {
             this.scene.start("MainMenu");
           })
           .catch((error) => {
-            console.log("🚀 ~ file: Login.js:74 ~ .catch ~ error", error);
+            console.log("error", error);
           }); 
       });
 
  
-      this.add.text(960, 700, ('Google'), {
+      this.add.text(960, 670, ('Google'), {
         fontFamily: 'Cooper Black', fontSize: 50, color: '#ffffff',
         stroke: '#000000', strokeThickness: 8,
         align: 'center'
@@ -48,11 +49,11 @@ export class Login extends Phaser.Scene {
             this.scene.start("MainMenu");
           })
           .catch((error) => {
-            console.log("🚀 ~ file: Login.js:74 ~ .catch ~ error", error);
+            console.log("error", error);
           });
       });
 
-      this.add.text(960, 850, ('Github'), {
+      this.add.text(960, 830, ('Github'), {
         fontFamily: 'Cooper Black', fontSize: 50, color: '#ffffff',
         stroke: '#000000', strokeThickness: 8,
         align: 'center'
@@ -66,7 +67,7 @@ export class Login extends Phaser.Scene {
             this.scene.start("Preloader");
           })
           .catch((error) => {
-            console.log("🚀 ~ file: Login.js:74 ~ .catch ~ error", error);
+            console.log("error", error);
           });
       });
   }

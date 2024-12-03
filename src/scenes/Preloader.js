@@ -26,6 +26,7 @@ export class Preloader extends Scene
         //elements
         this.load.image('anonymous', 'anonymous.png');
         this.load.image('google', 'google.png');
+        this.load.image('github', 'github.png');
 
         //titles
         this.load.image('peztitle', 'peztitle.png');
