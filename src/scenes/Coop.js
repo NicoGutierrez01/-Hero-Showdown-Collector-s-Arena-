@@ -15,17 +15,18 @@ export class Coop extends Scene {
         this.player2Score = 0;
         this.gameOver = false;
         this.jawaGroup = null; 
-        this.initialScore = 0;
-        this.jawasKilled = 0;
         this.initialLives = 3;
         this.initialSpawnDelay = 10000; 
         this.initialJawaSpeed = 100; 
-        this.initialsharedTime = 0;
         this.spawnMultiplier = 0.95; 
         this.speedIncrement = 20;
         this.baseTexture = "gun";
     }
-    
+
+    puntos;
+    tiempo;
+    jawas;
+
     init(data) {
         const savedVolume = localStorage.getItem('gameVolume') ? parseInt(localStorage.getItem('gameVolume'), 10) : 100;
         this.player1texture = data.player1;
@@ -33,13 +34,13 @@ export class Coop extends Scene {
         this.spawnDelay = this.initialSpawnDelay; 
         this.jawaSpeed = this.initialJawaSpeed;
         this.sharedLives = this.initialLives;
-        this.jawasKilled = 0;
-        this.sharedScore = this.initialScore;
+        this.jawasKilled = data.jawas || 0;
+        this.sharedScore = data.puntos || 0;
         this.maxBullets = 5;       
         this.reloadTime = 2000;    
         this.player1Bullets = this.maxBullets;
         this.player2Bullets = this.maxBullets;
-        this.sharedTime = this.initialsharedTime;
+        this.tiempo = data.tiempo || 0;
         if (!this.TrackGame || !this.TrackGame.isPlaying) {
             this.TrackGame = this.sound.add('TrackGame', { volume: savedVolume / 100, loop: true });
             this.TrackGame.play();
@@ -91,7 +92,7 @@ export class Coop extends Scene {
 
         this.sharedTimer = this.time.addEvent({
             delay: 1000, 
-            callback: () => this.sharedTime++,
+            callback: () => this.tiempo++,
             callbackScope: this,
             loop: true
         });
@@ -574,7 +575,7 @@ export class Coop extends Scene {
             this.scene.start('GameOver2', { 
                 sharedScore: this.sharedScore, 
                 jawasKilled: this.jawasKilled,
-                sharedTime: this.sharedTime
+                tiempo: this.tiempo
             });
         } 
     }  

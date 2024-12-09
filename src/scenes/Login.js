@@ -6,6 +6,8 @@ export class Login extends Phaser.Scene {
   }
   
   create() {
+
+    const firebasePlugin = this.plugins.get("FirebasePlugin");
     this.add.image(960, 540, 'fondomenu'); 
     this.add.image(960, 590, 'anonymous').setScale(0.5);
     this.add.image(960, 750, 'google').setScale(0.15);
@@ -25,8 +27,7 @@ export class Login extends Phaser.Scene {
     }).setOrigin(0.5)
       .setInteractive()
       .on("pointerdown", () => {
-        this.firebase
-          .signInAnonymously()
+        firebasePlugin.signInAnonymously()
           .then(() => {
             this.scene.start("MainMenu");
           })
@@ -43,8 +44,7 @@ export class Login extends Phaser.Scene {
     }).setOrigin(0.5)
       .setInteractive()
       .on("pointerdown", () => {
-        this.firebase
-          .signInWithGoogle()
+        firebasePlugin.signInWithGoogle()
           .then(() => {
             this.scene.start("MainMenu");
           })
@@ -61,10 +61,9 @@ export class Login extends Phaser.Scene {
       .setOrigin(0.5)
       .setInteractive()
       .on("pointerdown", () => {
-        this.firebase
-          .signInWithGithub()
+        firebasePlugin.signInWithGithub()
           .then(() => {
-            this.scene.start("Preloader");
+            this.scene.start("MainMenu");
           })
           .catch((error) => {
             console.log("error", error);
