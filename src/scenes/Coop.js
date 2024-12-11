@@ -34,8 +34,8 @@ export class Coop extends Scene {
         this.spawnDelay = this.initialSpawnDelay; 
         this.jawaSpeed = this.initialJawaSpeed;
         this.sharedLives = this.initialLives;
-        this.jawasKilled = data.jawas || 0;
-        this.sharedScore = data.puntos || 0;
+        this.jawas = data.jawas || 0;
+        this.puntos = data.puntos || 0;
         this.maxBullets = 5;       
         this.reloadTime = 2000;    
         this.player1Bullets = this.maxBullets;
@@ -319,8 +319,8 @@ export class Coop extends Scene {
                     object.hasCollided = true;
     
                     object.play('explode');
-                    this.sharedScore -= randombob;
-                    this.scoreText.setText(getPhrase('Puntaje:') + ' ' + this.sharedScore);
+                    this.puntos -= randombob;
+                    this.scoreText.setText(getPhrase('Puntaje:') + ' ' + this.puntos);
     
                     object.on('animationcomplete', () => {
                         object.destroy();
@@ -333,8 +333,8 @@ export class Coop extends Scene {
                     object.hasCollided = true;
     
                     object.play('explode');
-                    this.sharedScore -= randombob;
-                    this.scoreText.setText((getPhrase('Puntaje:') + ' ' + this.sharedScore));
+                    this.puntos -= randombob;
+                    this.scoreText.setText((getPhrase('Puntaje:') + ' ' + this.puntos));
     
                     object.on('animationcomplete', () => {
                         object.destroy();
@@ -497,9 +497,9 @@ export class Coop extends Scene {
             bullet.destroy();
     
             const scoreIncrement = Phaser.Math.Between(5, 20);
-            this.sharedScore += scoreIncrement;
-            this.jawasKilled++;
-            this.scoreText.setText(getPhrase('Puntaje:') + ' ' + this.sharedScore);
+            this.puntos += scoreIncrement;
+            this.jawas++;
+            this.scoreText.setText(getPhrase('Puntaje:') + ' ' + this.puntos);
         });
     
         this.physics.add.collider(bullet, this.ground, () => {
@@ -521,8 +521,8 @@ export class Coop extends Scene {
             devil.health = 50000000; 
         }
         devil.health--;
-        this.sharedScore += 150; 
-        this.scoreText.setText(getPhrase('Puntaje:') + ' ' + this.sharedScore);
+        this.puntos += 150; 
+        this.scoreText.setText(getPhrase('Puntaje:') + ' ' + this.puntos);
 
         if (devil.health <= 0) {
             devil.destroy(); 
@@ -565,7 +565,7 @@ export class Coop extends Scene {
     
         this.updateLivesDisplay();
     
-        console.log(`sharedLives: ${this.sharedLives}, sharedScore: ${this.sharedScore}, jawasKilled: ${this.jawasKilled}`);
+        console.log(`sharedLives: ${this.sharedLives}, puntos: ${this.puntos}, jawas: ${this.jawas}`);
     
         if (this.sharedLives <= 0) {
             this.TrackGame.pause();
@@ -573,8 +573,8 @@ export class Coop extends Scene {
 
 
             this.scene.start('GameOver2', { 
-                sharedScore: this.sharedScore, 
-                jawasKilled: this.jawasKilled,
+                puntos: this.puntos, 
+                jawas: this.jawas,
                 tiempo: this.tiempo
             });
         } 

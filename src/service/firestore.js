@@ -4,9 +4,9 @@ import { collection, addDoc, getDocs } from "firebase/firestore";
 
 const scoresCollection = collection(db, "scores");
 
-export const addScore = async (name, points) => {
+export const addScore = async ( jawas, puntos, tiempo) => {
   try {
-    await addDoc(scoresCollection, { name, points });
+    await addDoc(scoresCollection, { jawas, puntos, tiempo });
   } catch (e) {
     console.error("Error adding document: ", e);
   }

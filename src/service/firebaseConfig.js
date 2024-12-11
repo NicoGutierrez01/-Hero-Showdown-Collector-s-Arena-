@@ -68,25 +68,15 @@ export default class FirebasePlugin extends Phaser.Plugins.BasePlugin {
     return this.auth.currentUser;
   }
 
-  // firestore services
-  async addScore(user_id, user_name, points, remaining_time) {
-    try {
-        const scoresCollection = collection(this.db, "scores");
-        const q = query(scoresCollection, where("user_id", "==", user_id));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-            const scoreDoc = querySnapshot.docs[0];
-            const scoreRef = doc(this.db, "scores", scoreDoc.id);
-            await updateDoc(scoreRef, { user_name, points, remaining_time });
-        } else {
-            await addDoc(scoresCollection, { user_id, user_name, points, remaining_time });
-        }
-    } catch (e) {
-        console.error("Error adding or updating document: ", e);
-    }
+  async addScore( jawas, puntos, tiempo) {
+    await addDoc(collection(this.db, "scores"), {
+      jawas,
+      puntos,
+      tiempo,
+      createdAt: new Date(),
+    });
   }
-
+  
   async getScores() {
     // return []; 
     // return [{ user_name: "Anonimo", points: 100 }];
@@ -101,4 +91,5 @@ export default class FirebasePlugin extends Phaser.Plugins.BasePlugin {
   }
 
 }
+
 

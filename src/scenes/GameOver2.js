@@ -6,28 +6,15 @@ export class GameOver2 extends Scene {
         super('GameOver2');
     }
 
-    init(data) {
-        this.sharedScore = data.sharedScore;
-        this.jawasKilled = data.jawasKilled;
-    }
-
-    create ({ puntos, tiempo }){
+    create ({ jawas, puntos, tiempo }){
         const firebasePlugin = this.plugins.get('FirebasePlugin');
-        const user = firebasePlugin.getUser();
-        console.log(user);
-        let userName;
-        if (!user || user.isAnonymous) {
-            userName = getPhrase('Anonimo');
-        } else {
-            userName = user.displayName;
-        }
 
-        firebasePlugin.addScore(user.uid, userName, puntos, tiempo);
+        firebasePlugin.addScore( jawas, puntos, tiempo);
 
         this.add.image(960, 540, 'fondomenu');
 
-        const minutes = Math.floor(this.tiempo / 60);
-        const seconds = this.tiempo % 60;
+        const minutes = Math.floor(tiempo / 60);
+        const seconds = tiempo % 60;
         const formattedTime = `${minutes}:${seconds}`;
 
         this.add.text(960, 400, (getPhrase('Tiempo Sobrevivido:') + ' ' + formattedTime), {
@@ -35,12 +22,12 @@ export class GameOver2 extends Scene {
             stroke: '#000000', strokeThickness: 8, align: 'center'
         }).setOrigin(0.5);
 
-        this.add.text(960, 500, (getPhrase('Puntaje:') + ' ' + this.puntos), {
+        this.add.text(960, 500, (getPhrase('Puntaje:') + ' ' + puntos), {
             fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff', 
             stroke: '#000000', strokeThickness: 8, align: 'center'
         }).setOrigin(0.5);
 
-        this.add.text(960, 600, (getPhrase('Subditos Eliminados:') + ' ' + this.jawasKilled), { 
+        this.add.text(960, 600, (getPhrase('Subditos Eliminados:') + ' ' + jawas), { 
             fontFamily: 'Rockwell', fontSize: 38, color: '#ffffff', 
             stroke: '#000000', strokeThickness: 8, align: 'center'
         }).setOrigin(0.5);

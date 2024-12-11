@@ -23,7 +23,7 @@ export class Inicio extends Scene
         });
 
         this.cameras.main.once('camerafadeoutcomplete', () => {
-            this.scene.start('MainMenu');
+            this.scene.start('Login');
         });
 
         this.input.once('pointerdown', () => {
